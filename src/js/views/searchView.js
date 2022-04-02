@@ -9,15 +9,22 @@ const overlay = document.querySelector('.overlay');
 const searchBarInput = document.querySelector('.nav__search input');
 const searchBtn = document.querySelector('.nav__search__btn');
 const clearBtn = document.querySelector('.nav__search__clear');
+const searchList = document.querySelector('.nav__search-list');
 const searchResults = document.querySelector('.nav__search__results');
 
 class SearchView extends View {
   parentElement = searchResults;
-  // TOGGLE SEARCH BAR AND SEARCH LIST
-  toggleSearchBar() {
-    logo.classList.toggle('hidden');
-    searchBar.classList.toggle('active');
-    overlay.classList.toggle('active');
+
+  // OPEN OR CLOSE SEARCH BAR
+  openSearchBar() {
+    logo.classList.add('hidden');
+    searchBar.classList.add('active');
+    overlay.classList.add('active');
+  }
+  closeSearchBar() {
+    logo.classList.remove('hidden');
+    searchBar.classList.remove('active');
+    overlay.classList.remove('active');
   }
 
   // CLEAR INPUT FIELD AND SEARCH RESULTS LIST
@@ -35,7 +42,7 @@ class SearchView extends View {
     // when search btn clicked, toggle search bar and focus input field
     searchBtn.addEventListener('click', e => {
       e.preventDefault();
-      this.toggleSearchBar();
+      this.openSearchBar();
       searchBarInput.focus();
     });
 
@@ -47,17 +54,17 @@ class SearchView extends View {
         this.clearSearch();
       } else {
         // if it is empty, close search
-        this.toggleSearchBar();
+        this.closeSearchBar();
       }
     });
 
     // when overlay clicked, close search
-    overlay.addEventListener('click', this.toggleSearchBar);
+    overlay.addEventListener('click', this.closeSearchBar);
 
     // when escape pressed, close search ( only when search already opened)
     document.addEventListener('keydown', e => {
       if (e.key === `Escape` && searchBar.classList.contains('active'))
-        this.toggleSearchBar();
+        this.closeSearchBar();
     });
   }
 
@@ -77,7 +84,7 @@ class SearchView extends View {
       // if there is any value, run timeout, when it finishes, run function
       if (query)
         typingTimeout = setTimeout(() => {
-          // if query is less then 3 characters, return (API doesnt find anything in that case)
+          // if query is less then 3 characters, return (API wouldn't find anything in that case)
           if (query.length < 3) return;
           // run the handler function with query as argument
           handler(query);
@@ -110,6 +117,17 @@ class SearchView extends View {
     });
   }
 
+  // ADD HANDLER FOR CLICKING 'USE MY LOCATION' BTN
+  addHandlerLocationBtn(handler) {
+    searchList.addEventListener('click', e => {
+      // find the button
+      const target = e.target.closest('.location');
+      if (!target) return;
+      // run handler
+      handler();
+    });
+  }
+
   // ADD HANDLER FOR CLICKING ON ONE OF THE SEARCH RESULTS
   addHandlerSearchResult(handler) {
     searchResults.addEventListener('click', e => {
@@ -129,6 +147,7 @@ class SearchView extends View {
     searchBar.addEventListener('submit', e => {
       e.preventDefault();
       const query = searchBarInput.value;
+      // if query is less then 3 characters, return (API wouldn't find anything in that case)
       if (!query || query.length < 3) return;
       // run handler with query as argument
       handler(query);

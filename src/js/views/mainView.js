@@ -8,7 +8,7 @@ const leftArrow = document.querySelector('.fa-chevron-left');
 const rightArrow = document.querySelector('.fa-chevron-right');
 const spinner = document.querySelector('.spinner');
 
-class MainBox {
+class MainView {
   parentElement = allCardsBox;
   ////////////// SIDE SCROLLIING ARROWS //////////////
   ///////////////////////////////////////////////
@@ -28,17 +28,29 @@ class MainBox {
     leftArrow.addEventListener('click', () => this.sideScroll(-1));
   }
 
-  // DELETE FIRST CARD'S HTML
-  removeFirstCard() {
-    const cards = document.querySelectorAll('.card-box');
-    if (!cards.length) return;
-    allCardsBox.removeChild(cards[0]);
+  // CLEAR MAIN VIEW
+  clearView() {
+    allCardsBox.innerHTML = ``;
   }
 
   // RENDER SPINNER
   renderSpinner() {
     spinner.classList.toggle('active');
   }
+
+  // RENDER GIVEN ERROR
+  renderError(err) {
+    const cardMarkup = `
+      <div class="card-box">
+        <div class="card">
+          <div class="card__content">
+            <p class="card__error">${err}</p>
+          </div>
+        </div>
+      </div>
+    `;
+    allCardsBox.insertAdjacentHTML('beforeend', cardMarkup);
+  }
 }
 
-export default new MainBox();
+export default new MainView();

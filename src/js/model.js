@@ -8,28 +8,24 @@ export const state = {
     query: '',
     results: [],
   },
-  firstCard: {},
+  mainCard: {},
 };
 
 // GET LIST OF SEARCH RESULTS BASED ON QUERY
 export const getSearchData = async query => {
   try {
-    // if query is shorter then 3 characters, return (API returns empty array in that case)
-    if (query.length < 3) return;
-    console.log('fetching');
     // get data from API
     const response = await fetch(
       `https://api.weatherapi.com/v1/search.json?key=${API_KEY}&q=${query}&days=3&aqi=no&alerts=no`
     );
     // error handling
-    if (!response) throw new Error(`Error: ${response.status}`);
+    if (!response.ok) throw new Error(response.status);
     // return converted response data
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
-    //error handling
   } catch (err) {
-    console.error('💥', err.message);
+    // console.error('💥', err.message);
     throw err;
   }
 };
@@ -37,24 +33,36 @@ export const getSearchData = async query => {
 // GET FORECAST DATA BASED ON QUERY
 export const getForecastData = async query => {
   try {
-    // if query is shorter then 3 characters, return (API returns empty array in that case)
-    if (query.length < 3) return;
     // get data from API
     const response = await fetch(
       `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${query}&days=3&aqi=no&alerts=no`
     );
     // error handling
-    if (!response) throw new Error(`💥 ${response.status}`);
+    if (!response.ok) throw new Error(`We couldn't find anything :(`);
     // return converted response data
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
-    //error handling
   } catch (err) {
-    console.error('💥', err.message);
+    // console.error('💥', err);
     throw err;
   }
 };
+
+// GET USERS POSITION
+export const getUserPosition = () =>
+  // return promise
+  new Promise((resolve, reject) => {
+    // if device has geolocation
+    if (navigator.geolocation)
+      // run method for getting position
+      navigator.geolocation.getCurrentPosition(
+        // success - return position object as resolved promise
+        // fail - return error object as rejected promise
+        resolve,
+        reject
+      );
+  });
 
 // function getAllData() {
 //   Promise.all([getData('nelson'), getData('hilo')]);

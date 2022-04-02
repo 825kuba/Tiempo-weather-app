@@ -2,10 +2,10 @@ import * as model from './model.js';
 import navView from './views/navView.js';
 import searchView from './views/searchView.js';
 import CardView from './views/cardView.js';
-import mainBoxView from './views/mainBoxView.js';
+import mainView from './views/mainView.js';
+import cardView from './views/cardView.js';
 
 // CONTROL DYNAMIC DISPLAYING OF SEARCH RESULTS IN SEARH LIST
-// argument passed in in searchView file
 async function getListOfSearchResults(query) {
   try {
     // if no query, return
@@ -27,25 +27,18 @@ async function getListOfSearchResults(query) {
 }
 
 // CONTOL GETTING FORECAST DATA AFTER CLICKING ON A SEARCH RESULT OR SUBMITING SEARCH FORM
-// argument passed in in searchView file
 async function getForecastData(query) {
   try {
     // show spinner
-    mainBoxView.renderSpinner();
+    mainView.renderSpinner();
     // clear search input field and results list
     searchView.clearSearch();
     // close search bar
-    searchView.toggleSearchBar();
+    searchView.closeSearchBar();
     // get data from api
     const data = await model.getForecastData(query);
-    // if there's not data, return
-    // if (!data) return;
-    if (data.error) {
-      throw new Error(data.error.message);
-    }
-
     // save data to state object
-    model.state.firstCard = new CardView(
+    model.state.mainCard = new CardView(
       data.location.name,
       data.location.region,
       data.location.country,
@@ -55,24 +48,46 @@ async function getForecastData(query) {
       data.forecast
     );
     // delete first card
-    mainBoxView.removeFirstCard();
+    mainView.clearView();
     // render new first card
-    model.state.firstCard.renderCard();
+    model.state.mainCard.renderCard();
     // hide spinner
-    mainBoxView.renderSpinner();
+    mainView.renderSpinner();
   } catch (err) {
-    console.error('💥', err.message);
+    mainView.clearView();
+    mainView.renderSpinner();
+    mainView.renderError(err.message);
+  }
+}
+
+// CONTORL GETTING FORECAST DATA BASED ON USER'S LOCATION
+async function getForecastDataByPosition() {
+  try {
+    // try getting coords
+    const position = await model.getUserPosition();
+    // save them in string
+    const query = `${position.coords.latitude},${position.coords.longitude}`;
+    // run function with the string as argument
+    getForecastData(query);
+  } catch (err) {
+    // if getUserPosition function returned rejected promise, then clear view and display error based on the error object's code
+    mainView.clearView();
+    if (err.code === 1) mainView.renderError('Geolocation denied :(');
+    if (err.code === 2) mainView.renderError('Geolocation request failed :(');
+    if (err.code === 3)
+      mainView.renderError('Geolocation request timed out :(');
   }
 }
 
 function init() {
   navView.addHandlerMobileMenu();
-  mainBoxView.addHandlerSideScrollArrows();
+  mainView.addHandlerSideScrollArrows();
   searchView.addHandlerSearchControls();
   searchView.addHandlerSearchInput(getListOfSearchResults);
-  // model.getForecastData('nelson');
   searchView.addHandlerSearchResult(getForecastData);
   searchView.addHandlerSubmitForm(getForecastData);
+  // getForecastDataByPosition();
+  searchView.addHandlerLocationBtn(getForecastDataByPosition);
 }
 
 init();
