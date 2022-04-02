@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tiempo weather app</title>
+    <link rel="stylesheet" href="./icons/css/all.css" />
+    <link rel="stylesheet" href="./scss/main.scss" />
+    <script type="module" defer src="./js/controller.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <nav class="nav">
+        <img src="./img/logo-white.png" alt="" class="nav__logo" />
+
+        <form class="nav__search">
+          <button type="button" class="nav__search__btn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <button type="button" class="nav__search__clear">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <input
+            type="text"
+            placeholder="Start you search"
+            class="nav__search__input"
+          />
+
+          <ul class="nav__search-list">
+            <li class="nav__search-item location">
+              <p><i class="fa-solid fa-location-arrow"></i></p>
+              <span>Use my location </span>
+            </li>
+            <ul class="nav__search__results">
+              <!-- <li class="nav__search-item">
+                <p>City name</p>
+                <span>Country name</span>
+              </li> -->
+            </ul>
+          </ul>
+        </form>
+
+        <button class="nav__hamburger">
+          <!-- <i class="fa-solid fa-bars"></i> -->
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </button>
+
+        <ul class="nav__links">
+          <li class="nav__item">
+            <a href="#" class="nav__link"><i class="fa-solid fa-user"></i></a>
+          </li>
+          <li class="nav__item">
+            <a href="#" class="nav__link"><i class="fa-solid fa-gear"></i></a>
+          </li>
+          <li class="nav__item">
+            <a href="#" class="nav__link"
+              ><i class="fa-solid fa-circle-info"></i
+            ></a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="main-box">
+      <i class="fa-solid fa-chevron-left" data-dir="left"></i>
+      <i class="fa-solid fa-chevron-right" data-dir="right"></i>
+
+      <div class="all-cards">
+        <!-- <div class="card-box">
+          <div class="card">
+            <div class="card__toolbar">
+              <p class="card__time-date">
+                <span class="card__time">13:37</span>, Tue 26th
+              </p>
+
+              <button class="card__favourite">
+                <i class="fa-regular fa-star"></i>
+              </button>
+            </div>
+
+            <div class="card__content">
+              <div class="card__current">
+                <div class="card__name">
+                  <p class="card__city">San Francisco</p>
+                  <p class="card__country">United states of America</p>
+                </div>
+
+                <div class="card__conditions">
+                  <div class="card__temp">24°C</div>
+                  <img
+                    class="card__icon"
+                    src="//cdn.weatherapi.com/weather/64x64/day/176.png"
+                  />
+                </div>
+
+                <div class="card__descr">Patchy rain possible</div>
+
+                <div class="card__details">
+                  <div class="card__details card__details--weather">
+                    <div class="card__detail card__detail--rain">
+                      <i class="fa-solid fa-droplet"></i>
+                      74%
+                    </div>
+                    <div class="card__detail card__detail--wind">
+                      <i class="fa-solid fa-wind"></i>
+                      7 km/h
+                    </div>
+                  </div>
+                  <div class="card__details card__details--sun">
+                    <div class="card__detail card__detail--sunrise">
+                      <i class="fa-solid fa-up-long"></i>
+                      <i class="fa-solid fa-sun"></i>
+                      7:34 AM
+                    </div>
+                    <div class="card__detail card__detail--sunset">
+                      <i class="fa-solid fa-down-long"></i>
+                      <i class="fa-solid fa-sun"></i>
+                      7:42 PM
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card__all-forecasts">
+                <div class="card__controlls">
+                  <button class="card__controll-btn active">Hourly</button>
+                  <button class="card__controll-btn">Daily</button>
+                </div>
+
+                <div class="card__forecast card__forecast--hourly">
+                  <div class="card__forecast__item">
+                    <div class="card__forecast__name">14:00</div>
+                    <div class="card__forecast__icon">
+                      <img
+                        src="//cdn.weatherapi.com/weather/64x64/day/176.png"
+                      />
+                    </div>
+                    <div class="card__forecast__temp">25°C</div>
+                  </div>
+                </div>
+                <div class="card__forecast card__forecast--daily">
+                  <div class="card__forecast__item">
+                    <div class="card__forecast__name">Wed</div>
+                    <div class="card__forecast__icon">
+                      <img
+                        src="//cdn.weatherapi.com/weather/64x64/day/176.png"
+                      />
+                    </div>
+                    <div class="card__forecast__temp">25°C</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+      </div>
+      <div class="spinner spinner--large">
+        <i class="fa-solid fa-spinner"></i>
+      </div>
+    </main>
+    <div class="overlay"></div>
+  </body>
+</html>

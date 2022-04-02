@@ -1,0 +1,249 @@
+.nav {
+  position: relative;
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 1rem 2rem;
+
+  @media only screen and (min-width: $bp-large) {
+    gap: 3rem;
+  }
+
+  & button {
+    background-color: transparent;
+    border: none;
+    color: $color-white;
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+
+  &__search {
+    position: relative;
+    z-index: $z-4;
+    @include flex-start;
+    flex-direction: row-reverse;
+    gap: 1rem;
+    margin-left: auto;
+    height: 100%;
+    border-radius: 3px;
+    transition: flex-grow 0.2s ease;
+
+    @media only screen and (min-width: $bp-large) {
+      padding: 1rem 2rem;
+    }
+
+    &__clear {
+      display: none;
+    }
+
+    &__input {
+      background-color: transparent;
+      outline: none;
+      border: none;
+      color: $color-white;
+      font-size: 1.6rem;
+      width: 0;
+
+      // &:focus {
+      //   width: 100%;
+      // }
+    }
+
+    &__btn {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.2s ease;
+
+      &.hidden {
+        visibility: hidden;
+        opacity: 0;
+      }
+    }
+
+    &.active {
+      flex-grow: 1;
+
+      @media only screen and (min-width: $bp-large) {
+        outline: 1px solid $color-grey;
+      }
+
+      & .nav__search__input {
+        width: 100%;
+      }
+
+      & .nav__search-list {
+        display: initial;
+      }
+
+      & .nav__search__btn {
+        display: none;
+      }
+
+      & .nav__search__clear {
+        display: initial;
+      }
+    }
+  }
+
+  &__search-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: $color-white;
+    border-radius: 3px;
+    box-shadow: $shadow-light;
+    display: none;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: $color-grey $color-dark-grey;
+
+    &::-webkit-scrollbar {
+      width: 0.5rem;
+
+      &-track {
+        background-color: $color-dark-grey;
+      }
+
+      &-thumb {
+        background-color: $color-grey;
+      }
+    }
+
+    // &.active {
+    //   display: initial;
+    // }
+
+    & li {
+      list-style: none;
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1.2;
+
+      &:hover {
+        background-color: $color-grey;
+        // color: $color-white;
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid $color-dark-grey;
+      }
+
+      & .message {
+        font-weight: 600;
+        font-size: 1.7rem;
+      }
+
+      & span {
+        font-size: 1.2rem;
+      }
+
+      &.location {
+        font-weight: 500;
+
+        & .fa-location-arrow {
+          color: $color-blue;
+        }
+      }
+    }
+  }
+
+  &__logo {
+    width: 15rem;
+
+    @media only screen and (min-width: $bp-medium) {
+      width: unset;
+    }
+
+    &.hidden {
+      display: none;
+
+      @media only screen and (min-width: $bp-large) {
+        display: initial;
+      }
+    }
+  }
+
+  &__hamburger {
+    position: relative;
+    z-index: $z-2;
+    @include flex-col;
+    gap: 0.4rem;
+
+    & .bar {
+      width: 2rem;
+      height: 2px;
+      background-color: $color-white;
+      transition: transform 0.2s ease;
+    }
+
+    &.active {
+      & .bar:nth-child(1) {
+        position: absolute;
+        transform: rotate(-45deg);
+      }
+      & .bar:nth-child(3) {
+        position: absolute;
+        transform: rotate(45deg);
+      }
+      & .bar:nth-child(2) {
+        visibility: hidden;
+      }
+    }
+
+    @media only screen and (min-width: $bp-large) {
+      display: none;
+    }
+  }
+
+  &__links {
+    position: absolute;
+    top: -100%;
+    right: 0;
+    z-index: $z-1;
+    @include flex;
+    gap: 5rem;
+    width: 100%;
+    height: 100%;
+    background-color: $color-blue;
+    padding: 1rem 2rem;
+    box-shadow: $shadow-light;
+
+    transition: top 0.2s ease;
+
+    &.active {
+      top: 0;
+    }
+
+    // display: none;
+
+    @media only screen and (min-width: $bp-large) {
+      position: static;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      background-color: transparent;
+      padding: 0;
+      width: initial;
+      height: initial;
+      box-shadow: none;
+    }
+  }
+
+  &__item {
+    cursor: pointer;
+    list-style: none;
+  }
+
+  &__link:link,
+  &__link:visited {
+    text-decoration: none;
+    color: $color-white;
+    font-size: 1.6rem;
+  }
+}
