@@ -106,7 +106,7 @@
   }
 
   &__descr {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     grid-row: 4 / 5;
 
     @media only screen and (min-width: $bp-medium) {
@@ -221,6 +221,7 @@
     overflow: auto;
     scrollbar-width: thin;
     scrollbar-color: $color-grey $color-dark-grey;
+    // scroll-behavior: smooth;
 
     &::-webkit-scrollbar {
       height: 1vh;
@@ -239,7 +240,8 @@
     }
 
     &__name {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      text-transform: uppercase;
     }
 
     &__icon {
@@ -253,14 +255,14 @@
       font-size: 1.5rem;
     }
 
-    // &--daily {
-    //   display: none;
-    // }
+    &.hidden {
+      display: none;
+    }
   }
 
   &__error {
     font-size: 2.5rem;
-    margin: 1rem auto;
+    margin: 1rem auto 2rem auto;
     text-align: center;
   }
 }

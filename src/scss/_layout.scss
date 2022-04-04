@@ -31,7 +31,7 @@
 .card-box {
   width: 100vw;
   @include flex;
-  padding: 0 1rem;
+  padding: 0 2rem;
   overflow: hidden;
   scroll-snap-align: start;
 }
