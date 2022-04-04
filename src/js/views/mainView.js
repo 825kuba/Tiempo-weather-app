@@ -30,6 +30,10 @@ class MainView {
 
   // CLEAR MAIN VIEW
   clearView() {
+    // clear all intervals by setting a new one and then looping through all intervals until this new one, and clearing them
+    const dummyInterval = setInterval(function () {}, 1000);
+    for (let i = 0; i <= dummyInterval; i++) window.clearInterval(i);
+    // clear HTML
     allCardsBox.innerHTML = ``;
   }
 

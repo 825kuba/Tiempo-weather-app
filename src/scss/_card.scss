@@ -237,10 +237,11 @@
 
     &__item {
       @include flex-col;
+      gap: 0.5rem;
     }
 
     &__name {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       text-transform: uppercase;
     }
 

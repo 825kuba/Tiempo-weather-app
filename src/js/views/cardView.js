@@ -21,8 +21,10 @@ export default class {
 
     // TIME VARIABLES
     this.time = new Date(this.localTime);
-    this.timeHours = helpers.addZero(this.time.getHours());
-    this.timeMinutes = helpers.addZero(this.time.getMinutes());
+    this.timeHours = this.time.getHours();
+    this.timeMinutes = this.time.getMinutes();
+    this.timeSeconds = new Date().getSeconds(); // use client's time for getting seconds since API always returns time with seconds set to 0
+    this.colon = ':';
     this.timeDay = helpers.daysOfWeek(this.time.getDay());
     this.timeDayFull = helpers.daysOfWeek(this.time.getDay(), 'full');
     this.timeDate = helpers.dateEnding(this.time.getDate());
@@ -36,9 +38,11 @@ export default class {
       <div class="card">
         <div class="card__toolbar">
           <p class="card__time-date">
-            <span class="card__time">${this.timeHours}:${
-      this.timeMinutes
-    }</span>, ${this.timeDayFull} ${this.timeDate}
+            <span class="card__time">${helpers.addZero(
+              this.timeHours
+            )}:${helpers.addZero(this.timeMinutes)}</span>, ${
+      this.timeDayFull
+    } ${this.timeDate}
           </p>
 
           <button class="card__favourite">
@@ -114,37 +118,9 @@ export default class {
 
     // insert it into parent element
     allCardsBox.insertAdjacentHTML('beforeend', cardMarkup);
+  }
 
-    //RENDER DAILY FORECAST DATA
-    this.forecast.forecastday.forEach((day, i) => {
-      // get time (replaceAll necessary for Safari)
-      const time = new Date(day.date.replaceAll('-', '/'));
-      // get day of week name
-      let dayOfWeek = helpers.daysOfWeek(time.getDay());
-      // display 'today' instead of day name
-      if (i === 0) dayOfWeek = 'Today';
-      // create markup
-      const markup = `
-        <div class="card__forecast__item">
-          <div class="card__forecast__name">${dayOfWeek}</div>
-          <div class="card__forecast__icon">
-            <img
-              src=${day.day.condition.icon}
-            />
-          </div>
-          <div class="card__forecast__temp">${Math.round(
-            day.day.avgtemp_c
-          )}°C</div>
-        </div>
-      `;
-      // insert it into the parent element
-      document
-        .getElementById(this.id)
-        .querySelector('.card__forecast--daily')
-        .insertAdjacentHTML('beforeend', markup);
-    });
-
-    // RENDER HOURLY FORECAST DATA
+  renderForecastHourly() {
     // first we need to create an array of the next 24 hours:
     // get index of the first hour we need - next hour from now
     const index1 = Number(this.timeHours) + 1;
@@ -184,8 +160,40 @@ export default class {
         .querySelector('.card__forecast--hourly')
         .insertAdjacentHTML('beforeend', markup);
     });
+  }
 
-    // ADD HANDLER TO FORECAST CONTAINERS SO THEY SCROLL HORIZONTALY WITH WHEEL AND TOUCHPAD
+  renderForecastDaily() {
+    this.forecast.forecastday.forEach((day, i) => {
+      // get time (replaceAll necessary for Safari)
+      const time = new Date(day.date.replaceAll('-', '/'));
+      // get day of week name
+      let dayOfWeek = helpers.daysOfWeek(time.getDay());
+      // display 'today' instead of day name
+      if (i === 0) dayOfWeek = 'Today';
+      // create markup
+      const markup = `
+            <div class="card__forecast__item">
+              <div class="card__forecast__name">${dayOfWeek}</div>
+              <div class="card__forecast__icon">
+                <img
+                  src=${day.day.condition.icon}
+                />
+              </div>
+              <div class="card__forecast__temp">${Math.round(
+                day.day.avgtemp_c
+              )}°C</div>
+            </div>
+          `;
+      // insert it into the parent element
+      document
+        .getElementById(this.id)
+        .querySelector('.card__forecast--daily')
+        .insertAdjacentHTML('beforeend', markup);
+    });
+  }
+
+  // ALLOW HORIZONTAL SCROLLING WITH WHEEL OR TOUCHPAD IN FORECAST CONTAINERS
+  addHandlerScrollForecast() {
     const allForecasts = document
       .getElementById(this.id)
       .querySelectorAll('.card__forecast');
@@ -195,8 +203,13 @@ export default class {
         ele.scrollLeft += e.deltaY;
       });
     });
+  }
 
-    // ADD EVENT LISTENER TO FORECAST BUTTONS SO WE CAN CHANGE WHICH FORECAST IS DISPLAYED - this will work with any number of buttons
+  // CHANGE WHICH FORECAST IS DISPLAYED - this will work with any number of buttons
+  addHandlerForecastBtns() {
+    const allForecasts = document
+      .getElementById(this.id)
+      .querySelectorAll('.card__forecast');
     const forecastBtns = document
       .getElementById(this.id)
       .querySelectorAll('.card__controll-btn');
@@ -221,5 +234,55 @@ export default class {
         });
       });
     });
+  }
+
+  // ALGORITHM FOR UPDATING TIME AND CHANGING ':' TO ' ' WHICH GIVES THE BLINKING COLON EFFECT EVERY SECOND
+  updateTime() {
+    if (this.colon === ':') this.colon = ' ';
+    else if (this.colon === ' ') this.colon = ':';
+    this.timeSeconds++;
+    if (this.timeSeconds === 60) {
+      this.timeSeconds = 0;
+      this.timeMinutes++;
+      if (this.timeMinutes === 60) {
+        this.timeMinutes = 0;
+        this.timeHours++;
+        if (this.timeHours === 24) this.timeHours = 0;
+      }
+    }
+  }
+
+  // UPDATE TIME TEXT
+  updateTimeText() {
+    document
+      .getElementById(this.id)
+      .querySelector('.card__time').innerHTML = `${helpers.addZero(
+      this.timeHours
+    )}${this.colon}${helpers.addZero(this.timeMinutes)}`;
+
+    // console.log(
+    //   `${this.city} - ${helpers.addZero(this.timeHours)}${
+    //     this.colon
+    //   }${helpers.addZero(this.timeMinutes)}:${helpers.addZero(
+    //     this.timeSeconds
+    //   )}`
+    // );
+  }
+
+  // START INTERVAL
+  startTime() {
+    setInterval(() => {
+      this.updateTime();
+      this.updateTimeText();
+    }, 1000);
+  }
+
+  cardInit() {
+    this.renderCard();
+    this.renderForecastHourly();
+    this.renderForecastDaily();
+    this.addHandlerScrollForecast();
+    this.addHandlerForecastBtns();
+    this.startTime();
   }
 }

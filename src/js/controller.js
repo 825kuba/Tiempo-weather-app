@@ -47,10 +47,10 @@ async function getForecastData(query) {
       data.current,
       data.forecast
     );
-    // delete first card
+    // clear view
     mainView.clearView();
     // render new first card
-    model.state.mainCard.renderCard();
+    model.state.mainCard.cardInit();
     // hide spinner
     mainView.renderSpinner();
   } catch (err) {
