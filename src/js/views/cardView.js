@@ -23,11 +23,16 @@ export default class {
     this.time = new Date(this.localTime);
     this.timeHours = this.time.getHours();
     this.timeMinutes = this.time.getMinutes();
+    // this.timeHours = 23;
+    // this.timeMinutes = 59;
     this.timeSeconds = new Date().getSeconds(); // use client's time for getting seconds since API always returns time with seconds set to 0
+    // this.timeSeconds = 58;
     this.colon = ':';
-    this.timeDay = helpers.daysOfWeek(this.time.getDay());
-    this.timeDayFull = helpers.daysOfWeek(this.time.getDay(), 'full');
-    this.timeDate = helpers.dateEnding(this.time.getDate());
+    this.timeDayIndex = this.time.getDay();
+    this.timeDay = helpers.daysOfWeek(this.timeDayIndex);
+    this.timeDayFull = helpers.daysOfWeek(this.timeDayIndex, 'full');
+    // this.timeDateNumber = this.time.getDate();
+    // this.timeDate = helpers.dateEnding(this.timeDateNumber);
   }
 
   // RENDER WESTHER CARD
@@ -38,11 +43,9 @@ export default class {
       <div class="card">
         <div class="card__toolbar">
           <p class="card__time-date">
-            <span class="card__time">${helpers.addZero(
-              this.timeHours
-            )}:${helpers.addZero(this.timeMinutes)}</span>, ${
-      this.timeDayFull
-    } ${this.timeDate}
+            <span class="card__time">${this.timeHours}${
+      this.colon
+    }${helpers.addZero(this.timeMinutes)}</span>, ${this.timeDayFull}
           </p>
 
           <button class="card__favourite">
@@ -238,16 +241,28 @@ export default class {
 
   // ALGORITHM FOR UPDATING TIME AND CHANGING ':' TO ' ' WHICH GIVES THE BLINKING COLON EFFECT EVERY SECOND
   updateTime() {
+    //change colon to space and vice versa
     if (this.colon === ':') this.colon = ' ';
     else if (this.colon === ' ') this.colon = ':';
+    // add 1 second
     this.timeSeconds++;
     if (this.timeSeconds === 60) {
       this.timeSeconds = 0;
+      // add 1 minute
       this.timeMinutes++;
       if (this.timeMinutes === 60) {
         this.timeMinutes = 0;
+        // add 1 hour
         this.timeHours++;
-        if (this.timeHours === 24) this.timeHours = 0;
+        if (this.timeHours === 24) {
+          this.timeHours = 0;
+          // add day of week index
+          this.timeDayIndex++;
+          if (this.timeDayIndex > 6) this.timeDayIndex = 0;
+          this.timeDayFull = helpers.daysOfWeek(this.timeDayIndex, 'full');
+          // this.timeDateNumber++;
+          // this.timeDate = helpers.dateEnding(this.timeDateNumber);
+        }
       }
     }
   }
@@ -256,17 +271,11 @@ export default class {
   updateTimeText() {
     document
       .getElementById(this.id)
-      .querySelector('.card__time').innerHTML = `${helpers.addZero(
-      this.timeHours
-    )}${this.colon}${helpers.addZero(this.timeMinutes)}`;
-
-    // console.log(
-    //   `${this.city} - ${helpers.addZero(this.timeHours)}${
-    //     this.colon
-    //   }${helpers.addZero(this.timeMinutes)}:${helpers.addZero(
-    //     this.timeSeconds
-    //   )}`
-    // );
+      .querySelector(
+        '.card__time-date'
+      ).innerHTML = `<span class="card__time">${this.timeHours}${
+      this.colon
+    }${helpers.addZero(this.timeMinutes)}</span>, ${this.timeDayFull}`;
   }
 
   // START INTERVAL
