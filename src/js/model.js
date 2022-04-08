@@ -80,11 +80,9 @@ export const addOrRemoveCard = clickedCard => {
     state.favourites.push(clickedCard);
     state.favourites[state.favourites.length - 1].isFavourite = true;
   }
-
-  console.log(state.favourites);
   // save favourites to local storage
   setLocalStorage();
-
+  // return array length - value used by other functions in view
   return state.favourites.length;
 };
 

@@ -1,0 +1,64 @@
+.cards-nav {
+  @include flex;
+  justify-content: space-evenly;
+  height: 2rem;
+  position: relative;
+
+  &__index-dots {
+    @include flex;
+    gap: 1rem;
+  }
+
+  &__index-dot {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    border: 1px solid $color-white;
+    background-color: transparent;
+    cursor: pointer;
+
+    &.active {
+      background-color: $color-white;
+    }
+  }
+}
+
+// SIDE SCROLLING ARROWS
+.fa-chevron-left,
+.fa-chevron-right {
+  color: $color-grey;
+  font-size: 2.5rem;
+  opacity: 0.5;
+  position: fixed;
+  z-index: $z-2;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  display: none;
+  visibility: visible;
+  transition: opacity 0.2s ease;
+
+  &.active {
+    display: initial;
+  }
+
+  &.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  @media only screen and (min-width: $bp-medium) {
+    font-size: 3rem;
+  }
+
+  @media only screen and (min-width: $bp-large) {
+    opacity: 1;
+    font-size: 3.5rem;
+  }
+}
+.fa-chevron-left {
+  left: 3rem;
+}
+.fa-chevron-right {
+  right: 3rem;
+}

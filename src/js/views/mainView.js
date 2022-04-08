@@ -91,7 +91,6 @@ class MainView {
     this.scrollIndex = 0;
     // set max scroll index - array length - 1
     this.maxScrollIndex = num - 1;
-    console.log(this.maxScrollIndex);
     // activate arrows if there is more then 1 card
     if (this.maxScrollIndex === 0) return;
     leftArrow.classList.add('active');

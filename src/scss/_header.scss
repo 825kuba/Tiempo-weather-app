@@ -244,6 +244,27 @@
   &__item {
     cursor: pointer;
     list-style: none;
+    position: relative;
+
+    &__num-badge {
+      position: absolute;
+      z-index: -10;
+      background-color: $color-blue;
+      color: $color-white;
+      font-weight: 700;
+      font-size: 1.35rem;
+      border-radius: 50%;
+      width: 2.1rem;
+      height: 2.1rem;
+      bottom: 1rem;
+      left: 1rem;
+      @include flex;
+      display: none;
+
+      &.active {
+        display: flex;
+      }
+    }
   }
 
   &__link:link,

@@ -53,11 +53,11 @@ export class CardView {
     <div class="card-box" id="${this.id}">
       <div class="card">
         <div class="card__toolbar">
-          <p class="card__time-date">
+          <time class="card__time-date">
             <span class="card__time">${this.timeHours}${
       this.colon
     }${helpers.addZero(this.timeMinutes)}</span>, ${this.timeDayFull}
-          </p>
+          </time>
 
           <button class="card__favourite">
             <i class="${
@@ -309,12 +309,14 @@ export class CardView {
     this.addHandlerFavouriteBtn(handler);
   }
 
+  // HANDLER FOR CLICKING STAR ICON ON CARD
   addHandlerFavouriteBtn(handler) {
     document
       .getElementById(this.id)
       .querySelector('.card__favourite')
       .addEventListener('click', e => {
         e.preventDefault();
+        // slect the icon and toggle it's class - that changes look
         const star = e.target
           .closest('.card__favourite')
           .querySelector('.fa-star');
@@ -327,9 +329,10 @@ export class CardView {
         // } else if (star.classList.contains('fa-solid')) {
         //   this.favouriteBtnDisplayEmpty();
         // }
+
+        // run handler and save returned value in variable
         const favsLength = handler(this);
-        //  handler(this);
-        console.log(favsLength);
+        // run function for displaying number badge
         navView.displayNumOfFavourites(favsLength);
       });
   }

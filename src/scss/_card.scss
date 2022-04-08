@@ -227,7 +227,7 @@
     // scroll-behavior: smooth;
 
     &::-webkit-scrollbar {
-      height: 1vh;
+      height: 0.4rem;
 
       &-track {
         background-color: $color-dark-grey;

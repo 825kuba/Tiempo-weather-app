@@ -5,7 +5,9 @@ const navLinks = document.querySelector('.nav__links');
 const hamburger = document.querySelector('.nav__hamburger');
 const searchBtn = document.querySelector('.nav__search__btn');
 const logo = document.querySelector('.nav__logo');
-const favouritesBtn = document.querySelector('.nav__link--favourites');
+const favouritesBtn = document.querySelector('.nav__item--favourites');
+const favouritesBtnLink = favouritesBtn.querySelector('.nav__link');
+const numBadge = document.querySelector('.nav__item__num-badge');
 
 class navView {
   //  OPEN AND CLOSE MOBILE MENU
@@ -42,18 +44,26 @@ class navView {
     });
   }
 
+  // DISPLAY CURRENT NUMBER OF FAVOURITE CARDS
   displayNumOfFavourites(num) {
-    console.log(num);
-    if (num >= 1)
-      favouritesBtn.innerHTML = `
-    <i class="fa-solid fa-star"></i
-    >
-    `;
-    else
-      favouritesBtn.innerHTML = `
-    <i class="fa-regular fa-star"></i
-    >
-    `;
+    // if favourites array length at least 1
+    if (num >= 1) {
+      {
+        // chage favourites icon to filled version
+        favouritesBtnLink.innerHTML = '<i class="fa-solid fa-star"></i>';
+        // display current num of favs
+        numBadge.textContent = num;
+        // give the num badge active class
+        numBadge.classList.add('active');
+      }
+    } else {
+      // display empty icon
+      favouritesBtnLink.innerHTML = `<i class="fa-regular fa-star"></i>`;
+      // update number in badge
+      numBadge.textContent = num;
+      // hide badge
+      numBadge.classList.remove('active');
+    }
   }
 }
 

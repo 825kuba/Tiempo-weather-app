@@ -58,6 +58,6 @@ body {
     url('../img/bg/main-bg.jpg') center center / cover no-repeat;
 
   display: grid;
-  grid-template-rows: max-content 1fr;
+  grid-template-rows: max-content min-content 1fr;
   // row-gap: 2rem;
 }
