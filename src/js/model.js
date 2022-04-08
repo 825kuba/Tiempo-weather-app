@@ -9,6 +9,7 @@ export const state = {
     results: [],
   },
   mainCard: {},
+  favourites: [],
 };
 
 // GET LIST OF SEARCH RESULTS BASED ON QUERY
@@ -64,6 +65,37 @@ export const getUserPosition = () =>
       );
   });
 
-// function getAllData() {
-//   Promise.all([getData('nelson'), getData('hilo')]);
-// }
+// ADD AND REMOVING CARDS TO/FROM FAVOURITES
+export const addOrRemoveCard = clickedCard => {
+  // determine whether card is already in favourites
+  const isFavourite = state.favourites.some(card => card.id === clickedCard.id);
+  // if it is, remove it from there
+  if (isFavourite) {
+    const index = state.favourites.findIndex(
+      card => card.id === clickedCard.id
+    );
+    state.favourites.splice(index, 1);
+    // else add it to favourites
+  } else {
+    state.favourites.push(clickedCard);
+    state.favourites[state.favourites.length - 1].isFavourite = true;
+  }
+
+  console.log(state.favourites);
+  // save favourites to local storage
+  setLocalStorage();
+
+  return state.favourites.length;
+};
+
+// SAVING FAVOURITES DATA TO LOCAL STORAGE
+export const setLocalStorage = () => {
+  localStorage.setItem('tiempoFavourites', JSON.stringify(state.favourites));
+};
+
+// GETTING FAVOURITES DATA FROM LOCAL STORAGE
+export const getLocalStorage = () => {
+  const favourites = localStorage.getItem('tiempoFavourites');
+  if (favourites && favourites.length)
+    state.favourites = JSON.parse(favourites);
+};

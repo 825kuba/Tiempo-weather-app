@@ -1,12 +1,12 @@
 import * as model from './model.js';
 import navView from './views/navView.js';
 import searchView from './views/searchView.js';
-import CardView from './views/cardView.js';
+import { CardView } from './views/cardView.js';
 import mainView from './views/mainView.js';
-import cardView from './views/cardView.js';
+import * as helpers from './helpers.js';
 
 // CONTROL DYNAMIC DISPLAYING OF SEARCH RESULTS IN SEARH LIST
-async function getListOfSearchResults(query) {
+async function controlSearchResults(query) {
   try {
     // if no query, return
     if (!query) return;
@@ -27,7 +27,7 @@ async function getListOfSearchResults(query) {
 }
 
 // CONTOL GETTING FORECAST DATA AFTER CLICKING ON A SEARCH RESULT OR SUBMITING SEARCH FORM
-async function getForecastData(query) {
+async function controlForecastByQuery(query) {
   try {
     // show spinner
     mainView.renderSpinner();
@@ -37,6 +37,16 @@ async function getForecastData(query) {
     searchView.closeSearchBar();
     // get data from api
     const data = await model.getForecastData(query);
+    //check for already existing card in favourites array
+    const isFavourite = model.state.favourites.some(
+      card =>
+        card.id ===
+        helpers.generateId(
+          data.location.name,
+          data.location.region,
+          data.location.country
+        )
+    );
     // save data to state object
     model.state.mainCard = new CardView(
       data.location.name,
@@ -45,15 +55,17 @@ async function getForecastData(query) {
       data.location.localtime,
       data.current.is_day,
       data.current,
-      data.forecast
+      data.forecast,
+      isFavourite
     );
     // clear view
     mainView.clearView();
-    // render new first card
-    model.state.mainCard.cardInit();
+    // render new card
+    model.state.mainCard.cardInit(model.addOrRemoveCard);
     // hide spinner
     mainView.renderSpinner();
   } catch (err) {
+    // error handling
     mainView.clearView();
     mainView.renderSpinner();
     mainView.renderError(err.message);
@@ -61,14 +73,14 @@ async function getForecastData(query) {
 }
 
 // CONTORL GETTING FORECAST DATA BASED ON USER'S LOCATION
-async function getForecastDataByPosition() {
+async function controlForecastByPosition() {
   try {
     // try getting coords
     const position = await model.getUserPosition();
     // save them in string
     const query = `${position.coords.latitude},${position.coords.longitude}`;
     // run function with the string as argument
-    getForecastData(query);
+    controlForecastByQuery(query);
   } catch (err) {
     // if getUserPosition function returned rejected promise, then clear view and display error based on the error object's code
     mainView.clearView();
@@ -79,15 +91,73 @@ async function getForecastDataByPosition() {
   }
 }
 
+// CONTROL GETTING FORECAST DATA FOR ALL FAVOURITE CARDS
+async function controlForecastForFavourites() {
+  try {
+    // if there is no favourite card, return
+    if (!model.state.favourites.length) return;
+    // show spinner
+    mainView.renderSpinner();
+    // clear search input field and results list
+    searchView.clearSearch();
+    // close search bar
+    searchView.closeSearchBar();
+    // make array of API calls for each favourite card
+    const promises = [];
+    model.state.favourites.forEach(card =>
+      promises.push(
+        model.getForecastData(`${card.city} ${card.region} ${card.country}`)
+      )
+    );
+    // fetch all data from that array
+    const updatatedFavs = await Promise.all(promises);
+    // clear old favourites array
+    model.state.favourites.splice(0);
+    // create new favourite card for each API response and push it to favourites array to keep it updated
+    updatatedFavs.forEach(data => {
+      const isFavourite = true;
+      const card = new CardView(
+        data.location.name,
+        data.location.region,
+        data.location.country,
+        data.location.localtime,
+        data.current.is_day,
+        data.current,
+        data.forecast,
+        isFavourite
+      );
+      model.state.favourites.push(card);
+    });
+    // clear main view
+    mainView.clearView();
+    // render all favourite cards
+    model.state.favourites.forEach(card => {
+      card.cardInit(model.addOrRemoveCard);
+    });
+    mainView.initSideScroll(model.state.favourites.length);
+    // hide spinner
+    mainView.renderSpinner();
+  } catch (err) {
+    // error handling
+    mainView.clearView();
+    mainView.renderSpinner();
+    mainView.renderError(err.message);
+  }
+}
+
 function init() {
+  model.getLocalStorage();
   navView.addHandlerMobileMenu();
-  mainView.addHandlerSideScrollArrows();
+  navView.addHandlerLogo();
+  navView.addHandlerFavouritesBtn(controlForecastForFavourites);
+  navView.displayNumOfFavourites(model.state.favourites.length);
+  mainView.addHandlersSideScrolling();
   searchView.addHandlerSearchControls();
-  searchView.addHandlerSearchInput(getListOfSearchResults);
-  searchView.addHandlerSearchResult(getForecastData);
-  searchView.addHandlerSubmitForm(getForecastData);
-  // getForecastDataByPosition();
-  searchView.addHandlerLocationBtn(getForecastDataByPosition);
+  searchView.addHandlerSearchInput(controlSearchResults);
+  searchView.addHandlerSearchResult(controlForecastByQuery);
+  searchView.addHandlerSubmitForm(controlForecastByQuery);
+  // controlForecastByPosition();
+  searchView.addHandlerLocationBtn(controlForecastByPosition);
 }
 
 init();

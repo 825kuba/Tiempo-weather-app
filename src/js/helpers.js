@@ -25,3 +25,8 @@ export function dateEnding(num) {
 export function addZero(number) {
   return number < 10 ? `0${number}` : `${number}`;
 }
+
+//RETURN ID CREATED FROM CITY, REGION AND COUNTY NAMES
+export function generateId(city, region, country) {
+  return `${city}+${region}+${country}`;
+}

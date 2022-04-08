@@ -59,6 +59,11 @@
       &.hidden {
         visibility: hidden;
         opacity: 0;
+
+        @media only screen and (min-width: $bp-large) {
+          visibility: visible;
+          opacity: 1;
+        }
       }
     }
 
@@ -154,6 +159,7 @@
   }
 
   &__logo {
+    cursor: pointer;
     width: 15rem;
 
     @media only screen and (min-width: $bp-medium) {

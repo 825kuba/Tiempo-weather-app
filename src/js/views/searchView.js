@@ -25,6 +25,8 @@ class SearchView extends View {
     logo.classList.remove('hidden');
     searchBar.classList.remove('active');
     overlay.classList.remove('active');
+    // focus out of input field - this closes keyboard on mobile
+    searchBarInput.blur();
   }
 
   // CLEAR INPUT FIELD AND SEARCH RESULTS LIST
@@ -74,7 +76,7 @@ class SearchView extends View {
     // timer variable
     let typingTimeout;
     // interval variable
-    const typingInterval = 1000;
+    const typingInterval = 500;
     // when input field value changes run async function
     searchBarInput.addEventListener('input', async () => {
       // clear any potential timeout from before
@@ -131,15 +133,17 @@ class SearchView extends View {
   // ADD HANDLER FOR CLICKING ON ONE OF THE SEARCH RESULTS
   addHandlerSearchResult(handler) {
     searchResults.addEventListener('click', e => {
-      // get the clicked search result's name
-      const target = e.target
-        .closest('.nav__search-item')
-        .querySelector('p').innerHTML;
+      // get the clicked search-item element
+      const target = e.target.closest('.nav__search-item');
       if (!target) return;
-      // run handler with that name as argument
-      handler(target);
-      // focus out of input field - this closes keyboard on mobile
-      searchBarInput.blur();
+      //get city name
+      const city = target.querySelector('p').innerHTML;
+      // get country (and region) name
+      const country = target.querySelector('span').innerHTML;
+      // create query string
+      const query = `${city} ${country}`;
+      // run handler with that query as argument
+      handler(query);
     });
   }
 
@@ -151,8 +155,6 @@ class SearchView extends View {
       if (!query || query.length < 3) return;
       // run handler with query as argument
       handler(query);
-      // focus out of input field - this closes keyboard on mobile
-      searchBarInput.blur();
     });
   }
 }

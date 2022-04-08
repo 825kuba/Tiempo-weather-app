@@ -1,12 +1,22 @@
 'use strict';
 
 import * as helpers from '../helpers.js';
+import navView from './navView.js';
 
 //SELECT ELEMENTS
 const allCardsBox = document.querySelector('.all-cards');
 
-export default class {
-  constructor(city, region, country, localTime, isDay, current, forecast) {
+export class CardView {
+  constructor(
+    city,
+    region,
+    country,
+    localTime,
+    isDay,
+    current,
+    forecast,
+    isFavourite
+  ) {
     // MAIN VARIABLES FOR CARD
     this.city = city;
     this.region = region ? region : '';
@@ -15,9 +25,10 @@ export default class {
     this.isDay = isDay;
     this.current = current;
     this.forecast = forecast;
+    this.isFavourite = isFavourite;
 
     // UNIQUE ID
-    this.id = Math.round(Math.random() * Date.now());
+    this.id = helpers.generateId(this.city, this.region, this.country);
 
     // TIME VARIABLES
     this.time = new Date(this.localTime);
@@ -49,7 +60,9 @@ export default class {
           </p>
 
           <button class="card__favourite">
-            <i class="fa-regular fa-star"></i>
+            <i class="${
+              this.isFavourite ? 'fa-solid' : 'fa-regular'
+            } fa-star"></i>
           </button>
         </div>
 
@@ -286,12 +299,62 @@ export default class {
     }, 1000);
   }
 
-  cardInit() {
+  cardInit(handler) {
     this.renderCard();
     this.renderForecastHourly();
     this.renderForecastDaily();
     this.addHandlerScrollForecast();
     this.addHandlerForecastBtns();
     this.startTime();
+    this.addHandlerFavouriteBtn(handler);
   }
+
+  addHandlerFavouriteBtn(handler) {
+    document
+      .getElementById(this.id)
+      .querySelector('.card__favourite')
+      .addEventListener('click', e => {
+        e.preventDefault();
+        const star = e.target
+          .closest('.card__favourite')
+          .querySelector('.fa-star');
+        if (!star) return;
+        star.classList.toggle('fa-solid');
+        star.classList.toggle('fa-regular');
+        // THE FOLLOWING CODE (+ 2 MEXT FUNCTIONS WITH '*' MARK) WAS FOR SETTING EXACT CLASS OF BUTTON ICON INSTEAD OF JUST TOGGLING CLASSES - JUST KEEPING IT IN CASE THE TOGGLING WILL PROVE AS BUGGY
+        // if (star.classList.contains('fa-regular')) {
+        //   this.favouriteBtnDisplayFilled();
+        // } else if (star.classList.contains('fa-solid')) {
+        //   this.favouriteBtnDisplayEmpty();
+        // }
+        const favsLength = handler(this);
+        //  handler(this);
+        console.log(favsLength);
+        navView.displayNumOfFavourites(favsLength);
+      });
+  }
+
+  // '*' TEMPORARY - FOR CASE OF BUG
+  // favouriteBtnDisplayFilled() {
+  //   document
+  //     .getElementById(this.id)
+  //     .querySelector('.fa-star')
+  //     .classList.remove('fa-regular');
+  //   document
+  //     .getElementById(this.id)
+  //     .querySelector('.fa-star')
+  //     .classList.add('fa-solid');
+  // }
+
+  // '*' TEMPORARY - FOR CASE OF BUG
+  // favouriteBtnDisplayEmpty() {
+  //   document
+  //     .getElementById(this.id)
+  //     .querySelector('.fa-star')
+  //     .classList.remove('fa-solid');
+  //   document
+  //     .getElementById(this.id)
+  //     .querySelector('.fa-star')
+  //     .classList.add('fa-regular');
+  // }
 }
