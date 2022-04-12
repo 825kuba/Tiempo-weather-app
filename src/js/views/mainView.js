@@ -7,9 +7,11 @@ const mainBox = document.querySelector('.main-box');
 const leftArrow = document.querySelector('.fa-chevron-left');
 const rightArrow = document.querySelector('.fa-chevron-right');
 const spinner = document.querySelector('.spinner');
+const indexDots = document.querySelector('.cards-nav__index-dots');
 
 class MainView {
   parentElement = allCardsBox;
+  prevScrollIndex = 0;
   scrollIndex = 0;
   maxScrollIndex = 0;
   ////////////// SIDE SCROLLIING ARROWS //////////////
@@ -19,9 +21,9 @@ class MainView {
   // parameter is 1 or -1
   sideScroll(value) {
     // get width of card-box element and times it with argument - this will give us the scroll direction and also how much should the scroll be
-    const scrollWidth = mainBox.querySelector('.card-box').scrollWidth * value;
+    const scrollWidth = mainBox.querySelector('.card-box').scrollWidth;
     // make the scroll happen
-    mainBox.scrollLeft += scrollWidth;
+    mainBox.scrollLeft += scrollWidth * value;
   }
 
   // ADD ALL HANDLERS FOR SCROLLING
@@ -51,15 +53,18 @@ class MainView {
 
     //2) SET EVENT LISTENER ON SCROLL EVENT
     // - calculate scroll index, which is used to make left/right arrow show/hide as needed
+    // explanation: sometimes, especially when zooming in or making the browser window very small, the scroll index didn't end up being an integer, but somethinng like 3.0000238472. So I rounded the number, but then I had no way to stop adjustArrows function from firing A LOT of times on every scroll event. So I made prevScrollIndex variable, and the adjustArrow function only runs ONCE when the scrollIndex and prevScrollIndex aren't equal. You can see this nicely with console logging both variables and some message from the adjustArrows function
     mainBox.addEventListener('scroll', () => {
       // get horizontal scroll position
       const scrollPosition = mainBox.scrollLeft;
       // get width of card-box element
       const cardBoxWidth = mainBox.querySelector('.card-box').scrollWidth;
-      // calculate the scroll index
-      this.scrollIndex = scrollPosition / cardBoxWidth;
-      // only after it's a round integer, set the arrow style
-      if (this.scrollIndex % 1 !== 0) return;
+      // set previous scroll index to current scroll index
+      this.prevScrollIndex = this.scrollIndex;
+      // calculate new current scroll index
+      this.scrollIndex = Math.round(scrollPosition / cardBoxWidth);
+      // only after current index is different from previous index, adjust the arrows
+      if (this.prevScrollIndex === this.scrollIndex) return;
       this.adjustArrows();
     });
   }
@@ -81,6 +86,14 @@ class MainView {
       leftArrow.classList.remove('hidden');
       rightArrow.classList.add('hidden');
     }
+    // remove active class from previous index dot
+    document
+      .querySelectorAll('.cards-nav__index-dot')
+      [this.prevScrollIndex].classList.remove('active');
+    // add active class to current index dot
+    document
+      .querySelectorAll('.cards-nav__index-dot')
+      [this.scrollIndex].classList.add('active');
   }
 
   // INITIAL STATE OF SCROLLING - ARGUMENT IS FAVOURITE CARDS ARRAY LENGTH
@@ -98,6 +111,47 @@ class MainView {
     // hide left arrow show right arrow (scrolling always start on left)
     leftArrow.classList.add('hidden');
     rightArrow.classList.remove('hidden');
+    // render index dots
+    this.renderIndexDots(num - 1);
+    // set first index dot to active
+    document
+      .querySelectorAll('.cards-nav__index-dot')
+      [this.scrollIndex].classList.add('active');
+    this.addHandlerIndexDots();
+  }
+
+  renderIndexDots(num) {
+    // fill idex-dots parent elements with children - the actual dots
+    indexDots.innerHTML = '';
+    for (let i = 0; i <= num; i++) {
+      indexDots.insertAdjacentHTML(
+        'beforeend',
+        `
+          <button class="cards-nav__index-dot"></button>
+        `
+      );
+    }
+    // set active class on the parent element - make the index dots visible
+    indexDots.classList.add('active');
+  }
+
+  addHandlerIndexDots() {
+    // set event listener on index-dots element
+    document
+      .querySelector('.cards-nav__index-dots')
+      .addEventListener('click', e => {
+        // if the target isn't index-dot, return
+        const target = e.target.closest('.cards-nav__index-dot');
+        if (!target) return;
+        // get index of the clicked dot
+        const clickedIndex = Array.from(
+          document.querySelectorAll('.cards-nav__index-dot')
+        ).indexOf(target);
+        // calculate the target index: the current scrollIndex minus the clickedIndex to get the value of how muhc we need to scroll, and times it with -1 to get the correct scroll direction
+        const targetIndex = (this.scrollIndex - clickedIndex) * -1;
+        // scroll the mainBox element
+        this.sideScroll(targetIndex);
+      });
   }
 
   // CLEAR MAIN VIEW
@@ -107,8 +161,12 @@ class MainView {
     for (let i = 0; i <= dummyInterval; i++) window.clearInterval(i);
     // clear HTML
     allCardsBox.innerHTML = ``;
+    // hide arrows
     leftArrow.classList.remove('active');
     rightArrow.classList.remove('active');
+    // empty index dots and hide parent element
+    indexDots.innerHTML = '';
+    indexDots.classList.remove('active');
   }
 
   // RENDER SPINNER

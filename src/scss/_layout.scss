@@ -1,17 +1,20 @@
 .main-box {
+  // border: 1px solid red;
   position: relative;
   width: 100%;
   display: flex;
   align-items: center;
   // overflow: hidden;
   overflow: auto;
+  padding: 1rem 0 2rem 0;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
+  scrollbar-width: none;
   scrollbar-color: $color-grey $color-dark-grey;
 
   &::-webkit-scrollbar {
     height: 1vh;
+    display: none;
 
     &-track {
       background-color: $color-dark-grey;
@@ -26,7 +29,8 @@
 .all-cards {
   width: max-content;
   display: flex;
-  justify-content: flex-start;
+  align-items: flex-start;
+  // justify-content: flex-start;
 }
 
 .card-box {
