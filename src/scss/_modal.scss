@@ -1,0 +1,189 @@
+.modal {
+  background-color: $color-white;
+  position: fixed;
+  z-index: $z-6;
+  width: max-content;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: $color-grey $color-dark-grey;
+
+  &::-webkit-scrollbar {
+    width: 1vw;
+
+    &-track {
+      background-color: $color-dark-grey;
+    }
+
+    &-thumb {
+      background-color: $color-grey;
+    }
+  }
+  top: -100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  padding: 0 0 2rem 0;
+  color: $color-black;
+  border-radius: 3px;
+  font-size: 1.6rem;
+  transition: opacity 0.3s ease-in, top 0.2s ease-in;
+
+  &.active {
+    opacity: 1;
+    top: 50%;
+  }
+
+  &__close {
+    position: absolute;
+    right: 1rem;
+    top: 0;
+    font-size: 3rem;
+    background-color: transparent;
+    color: $color-black;
+    border: none;
+    cursor: pointer;
+  }
+
+  &__heading {
+    text-align: center;
+    font-size: 2.5rem;
+    padding: 4rem 2rem;
+  }
+
+  &__settings {
+    @include flex-col;
+    align-items: stretch;
+  }
+
+  &__section {
+    position: relative;
+    border: none;
+    padding: 1rem 2rem;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: calc(100% - 4rem);
+      height: 0;
+      border-bottom: 1px dotted $color-grey;
+      bottom: 0;
+      left: 2rem;
+    }
+
+    &:hover {
+      background-color: rgba($color-grey, 0.2);
+    }
+  }
+
+  &__options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  &__option {
+    justify-self: start;
+    @include flex;
+    gap: 0.3rem;
+
+    &,
+    & input {
+      cursor: pointer;
+    }
+  }
+
+  // CUSTOM RADIO BUTTONS
+
+  &__option {
+    & input[type='radio'] {
+      appearance: none;
+
+      @supports not (appearance: none) {
+        & {
+          opacity: 0;
+        }
+      }
+
+      &:checked ~ .modal__radio::after {
+        transform: scale(1);
+      }
+    }
+  }
+
+  &__radio {
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 2px;
+    border-radius: 50%;
+    border: 2px solid $color-blue;
+
+    &::after {
+      content: '';
+      transform: scale(0);
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 50%;
+      background-color: $color-blue;
+    }
+  }
+
+  // SWITCHING BUTTON
+  &__switch {
+    align-self: center;
+    position: relative;
+    width: 5rem;
+    height: 2.5rem;
+    cursor: pointer;
+
+    &__bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 500rem;
+      background-color: $color-grey;
+      transition: background-color 0.15s ease-in-out;
+
+      &::after {
+        position: absolute;
+        content: '';
+        top: 2px;
+        left: 2px;
+        width: calc(2.5rem - 4px);
+        height: calc(2.5rem - 4px);
+        border-radius: 50%;
+        box-shadow: 0 0 5px rgba($color-black, 0.25);
+        background-color: $color-white;
+        transition: transform 0.15s ease-in-out;
+      }
+    }
+
+    & input {
+      appearance: none;
+
+      @supports not (appearance: none) {
+        & {
+          opacity: 0;
+        }
+      }
+
+      &:checked {
+        & ~ .modal__switch__bg {
+          background-color: $color-green;
+        }
+
+        & ~ .modal__switch__bg::after {
+          transform: translateX(2.5rem);
+        }
+      }
+    }
+  }
+}

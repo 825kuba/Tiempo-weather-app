@@ -41,7 +41,6 @@
       </form>
 
       <button class="nav__hamburger">
-        <!-- <i class="fa-solid fa-bars"></i> -->
         <div class="bar"></div>
         <div class="bar"></div>
         <div class="bar"></div>
@@ -52,16 +51,18 @@
           <a href="#" class="nav__link"><i class="fa-regular fa-star"></i></a>
           <span class="nav__item__num-badge">0</span>
         </li>
-        <li class="nav__item">
+        <li class="nav__item nav__item--settings">
           <a href="#" class="nav__link"><i class="fa-solid fa-gear"></i></a>
         </li>
-        <li class="nav__item">
+        <li class="nav__item nav__item--info">
           <a href="#" class="nav__link"
             ><i class="fa-solid fa-circle-info"></i
           ></a>
         </li>
       </ul>
     </header>
+
+    <div class="overlay overlay--search"></div>
 
     <nav class="cards-nav">
       <i class="fa-solid fa-chevron-left"></i>
@@ -75,10 +76,7 @@
     </nav>
 
     <main class="main-box">
-      <!-- <i class="fa-solid fa-chevron-left"></i>
-      <i class="fa-solid fa-chevron-right"></i> -->
-
-      <div class="all-cards">
+      <section class="all-cards">
         <!-- <div class="card-box">
           <div class="card">
             <div class="card__toolbar">
@@ -166,11 +164,104 @@
             </div>
           </div>
         </div> -->
-      </div>
-      <div class="spinner spinner--large">
-        <i class="fa-solid fa-spinner"></i>
-      </div>
+      </section>
     </main>
-    <div class="overlay"></div>
+
+    <div class="overlay overlay--modal"></div>
+
+    <section class="modal modal--info">
+      <button class="modal__close">&times;</button>
+      <img src="./img/logo-black.png" alt="tiempo logo" class="info__logo" />
+      <p>
+        Tiempo weather is a single page application that I built to practice CSS
+        and JavaScript
+      </p>
+    </section>
+
+    <section class="modal modal--settings">
+      <button class="modal__close">&times;</button>
+      <h2 class="modal__heading"><i class="fa-solid fa-gear"></i> Settings</h2>
+
+      <form action="#" class="modal__settings">
+        <fieldset class="modal__section">
+          <h4 class="modal__section-name">Temperature:</h4>
+          <div class="modal__options">
+            <label class="modal__option">
+              <input type="radio" name="temp" value="c" checked />
+              <div class="modal__radio"></div>
+              °C
+            </label>
+            <label class="modal__option">
+              <input type="radio" name="temp" value="f" />
+              <div class="modal__radio"></div>
+              °F
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="modal__section">
+          <h4 class="modal__section-name">Wind:</h4>
+          <div class="modal__options">
+            <label class="modal__option">
+              <input type="radio" name="wind" value="kph" checked />
+              <div class="modal__radio"></div>
+              km/h
+            </label>
+            <label class="modal__option">
+              <input type="radio" name="wind" value="mph" />
+              <div class="modal__radio"></div>
+              m/h
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="modal__section">
+          <h4 class="modal__section-name">Rain:</h4>
+          <div class="modal__options">
+            <label class="modal__option">
+              <input type="radio" name="rain" value="mm" checked />
+              <div class="modal__radio"></div>
+              mm
+            </label>
+            <label class="modal__option">
+              <input type="radio" name="rain" value="in" />
+              <div class="modal__radio"></div>
+              in
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="modal__section">
+          <h4 class="modal__section-name">Time format:</h4>
+          <div class="modal__options">
+            <label class="modal__option">
+              <input type="radio" name="time" value="24" checked />
+              <div class="modal__radio"></div>
+              24h
+            </label>
+
+            <label class="modal__option">
+              <input type="radio" name="time" value="12" />
+              <div class="modal__radio"></div>
+              12h
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="modal__section">
+          <h4 class="modal__section-name">Smooth scrolling:</h4>
+          <label class="modal__switch">
+            <input
+              type="checkbox"
+              name="scroll"
+              value="on"
+              checked
+              class="modal__switch__btn"
+            />
+            <div class="modal__switch__bg"></div>
+          </label>
+        </fieldset>
+      </form>
+    </section>
   </body>
 </html>

@@ -9,7 +9,7 @@ const rightArrow = document.querySelector('.fa-chevron-right');
 const spinner = document.querySelector('.spinner');
 const indexDots = document.querySelector('.cards-nav__index-dots');
 
-class MainView {
+class MainView extends View {
   parentElement = allCardsBox;
   prevScrollIndex = 0;
   scrollIndex = 0;
@@ -55,6 +55,9 @@ class MainView {
     // - calculate scroll index, which is used to make left/right arrow show/hide as needed
     // explanation: sometimes, especially when zooming in or making the browser window very small, the scroll index didn't end up being an integer, but somethinng like 3.0000238472. So I rounded the number, but then I had no way to stop adjustArrows function from firing A LOT of times on every scroll event. So I made prevScrollIndex variable, and the adjustArrow function only runs ONCE when the scrollIndex and prevScrollIndex aren't equal. You can see this nicely with console logging both variables and some message from the adjustArrows function
     mainBox.addEventListener('scroll', () => {
+      // make sure there are cards before doing any scrolling
+      const cardBoxes = document.querySelectorAll('.card-box');
+      if (!cardBoxes.length) return;
       // get horizontal scroll position
       const scrollPosition = mainBox.scrollLeft;
       // get width of card-box element
@@ -86,14 +89,14 @@ class MainView {
       leftArrow.classList.remove('hidden');
       rightArrow.classList.add('hidden');
     }
+    // get all index dots
+    const indexDots = document.querySelectorAll('.cards-nav__index-dot');
+    // if there is none, return
+    if (!indexDots.length) return;
     // remove active class from previous index dot
-    document
-      .querySelectorAll('.cards-nav__index-dot')
-      [this.prevScrollIndex].classList.remove('active');
+    indexDots[this.prevScrollIndex].classList.remove('active');
     // add active class to current index dot
-    document
-      .querySelectorAll('.cards-nav__index-dot')
-      [this.scrollIndex].classList.add('active');
+    indexDots[this.scrollIndex].classList.add('active');
   }
 
   // INITIAL STATE OF SCROLLING - ARGUMENT IS FAVOURITE CARDS ARRAY LENGTH
@@ -170,9 +173,9 @@ class MainView {
   }
 
   // RENDER SPINNER
-  renderSpinner() {
-    spinner.classList.toggle('active');
-  }
+  // renderSpinner() {
+  //   spinner.classList.toggle('active');
+  // }
 
   // RENDER GIVEN ERROR
   renderError(err) {
@@ -186,6 +189,10 @@ class MainView {
       </div>
     `;
     allCardsBox.insertAdjacentHTML('beforeend', cardMarkup);
+  }
+
+  showInfoModal() {
+    infoModal.classList.toggle('active');
   }
 }
 

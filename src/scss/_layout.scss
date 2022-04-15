@@ -43,17 +43,34 @@
 
 // overlay
 .overlay {
-  position: absolute;
-  z-index: $z-3;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  bottom: 0;
+  right: 0;
   background-color: transparent;
   display: none;
 
   &.active {
     display: block;
+  }
+
+  &--search {
+    z-index: $z-3;
+  }
+
+  &--modal {
+    z-index: $z-5;
+    background-color: rgba($color-black, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    // BACKDROP-FILTER FALLBACK
+    @supports not ((backdrop-filter: none) or (-webkit-backdrop-filter: none)) {
+      & {
+        background-color: rgba($color-black, 0.7);
+      }
+    }
   }
 }
 
@@ -66,31 +83,31 @@
   color: $color-blue;
   padding: 1rem;
 
-  &--large {
-    position: absolute;
-    z-index: $z-2;
-    top: 0;
-    left: 0;
-    color: $color-white;
-    font-size: 5rem;
-    padding: 0;
-    display: none;
+  // &--large {
+  //   position: absolute;
+  //   z-index: $z-2;
+  //   top: 0;
+  //   left: 0;
+  //   color: $color-white;
+  //   font-size: 5rem;
+  //   padding: 0;
+  //   display: none;
 
-    background-color: rgba($color-black, 0.3);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+  //   background-color: rgba($color-black, 0.3);
+  //   backdrop-filter: blur(5px);
+  //   -webkit-backdrop-filter: blur(5px);
 
-    // BACKDROP-FILTER FALLBACK
-    @supports not ((backdrop-filter: none) or (-webkit-backdrop-filter: none)) {
-      & {
-        background-color: rgba($color-black, 0.6);
-      }
-    }
-  }
+  //   // BACKDROP-FILTER FALLBACK
+  //   @supports not ((backdrop-filter: none) or (-webkit-backdrop-filter: none)) {
+  //     & {
+  //       background-color: rgba($color-black, 0.6);
+  //     }
+  //   }
+  // }
 
-  &.active {
-    display: flex;
-  }
+  // &.active {
+  //   display: flex;
+  // }
 
   & .fa-spinner {
     animation: rotate 2.5s infinite linear;
@@ -103,6 +120,29 @@
 
     100% {
       transform: rotate(360deg);
+    }
+  }
+}
+
+// big spinner in main container
+.all-cards .spinner {
+  color: $color-white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 5rem;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background-color: rgba($color-black, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  // BACKDROP-FILTER FALLBACK
+  @supports not ((backdrop-filter: none) or (-webkit-backdrop-filter: none)) {
+    & {
+      background-color: rgba($color-black, 0.6);
     }
   }
 }

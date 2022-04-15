@@ -10,6 +10,15 @@ export const state = {
   },
   mainCard: {},
   favourites: [],
+  settings: {
+    units: {
+      temp: 'c',
+      wind: 'kph',
+      rain: 'mm',
+    },
+    time: '24',
+    scrollBehaviour: 'smooth',
+  },
 };
 
 // GET LIST OF SEARCH RESULTS BASED ON QUERY

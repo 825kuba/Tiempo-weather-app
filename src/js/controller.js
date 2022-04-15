@@ -4,6 +4,7 @@ import searchView from './views/searchView.js';
 import { CardView } from './views/cardView.js';
 import mainView from './views/mainView.js';
 import * as helpers from './helpers.js';
+import modalView from './views/modalView.js';
 
 // CONTROL DYNAMIC DISPLAYING OF SEARCH RESULTS IN SEARH LIST
 async function controlSearchResults(query) {
@@ -29,12 +30,14 @@ async function controlSearchResults(query) {
 // CONTOL GETTING FORECAST DATA AFTER CLICKING ON A SEARCH RESULT OR SUBMITING SEARCH FORM
 async function controlForecastByQuery(query) {
   try {
-    // show spinner
-    mainView.renderSpinner();
     // clear search input field and results list
     searchView.clearSearch();
     // close search bar
     searchView.closeSearchBar();
+    // clear view
+    mainView.clearView();
+    // show spinner
+    mainView.renderSpinner();
     // get data from api
     const data = await model.getForecastData(query);
     //check for already existing card in favourites array
@@ -62,12 +65,9 @@ async function controlForecastByQuery(query) {
     mainView.clearView();
     // render new card
     model.state.mainCard.cardInit(model.addOrRemoveCard);
-    // hide spinner
-    mainView.renderSpinner();
   } catch (err) {
     // error handling
     mainView.clearView();
-    mainView.renderSpinner();
     mainView.renderError(err.message);
   }
 }
@@ -75,6 +75,10 @@ async function controlForecastByQuery(query) {
 // CONTORL GETTING FORECAST DATA BASED ON USER'S LOCATION
 async function controlForecastByPosition() {
   try {
+    // clear view
+    mainView.clearView();
+    // show spinner
+    mainView.renderSpinner();
     // try getting coords
     const position = await model.getUserPosition();
     // save them in string
@@ -96,12 +100,14 @@ async function controlForecastForFavourites() {
   try {
     // if there is no favourite card, return
     if (!model.state.favourites.length) return;
-    // show spinner
-    mainView.renderSpinner();
     // clear search input field and results list
     searchView.clearSearch();
     // close search bar
     searchView.closeSearchBar();
+    // clear main view
+    mainView.clearView();
+    // show spinner
+    mainView.renderSpinner();
     // make array of API calls for each favourite card
     const promises = [];
     model.state.favourites.forEach(card =>
@@ -135,12 +141,9 @@ async function controlForecastForFavourites() {
       card.cardInit(model.addOrRemoveCard);
     });
     mainView.initSideScroll(model.state.favourites.length);
-    // hide spinner
-    mainView.renderSpinner();
   } catch (err) {
     // error handling
     mainView.clearView();
-    mainView.renderSpinner();
     mainView.renderError(err.message);
   }
 }
@@ -151,13 +154,21 @@ function init() {
   navView.addHandlerLogo();
   navView.addHandlerFavouritesBtn(controlForecastForFavourites);
   navView.displayNumOfFavourites(model.state.favourites.length);
-  mainView.addHandlersSideScrolling();
+  navView.addHandlerInfoBtn();
+  navView.addHandlerSettingsBtn();
+  modalView.addHandlerModalOverlay();
   searchView.addHandlerSearchControls();
   searchView.addHandlerSearchInput(controlSearchResults);
   searchView.addHandlerSearchResult(controlForecastByQuery);
   searchView.addHandlerSubmitForm(controlForecastByQuery);
   // controlForecastByPosition();
   searchView.addHandlerLocationBtn(controlForecastByPosition);
+  mainView.addHandlersSideScrolling();
+
+  document.querySelector('.modal__settings').addEventListener('change', e => {
+    console.log(e.target.checked);
+    console.log(e.target);
+  });
 }
 
 init();

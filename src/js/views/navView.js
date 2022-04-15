@@ -1,5 +1,7 @@
 'use strict';
 
+import modalView from './modalView.js';
+
 // SELECT ELEMENTS
 const navLinks = document.querySelector('.nav__links');
 const hamburger = document.querySelector('.nav__hamburger');
@@ -8,6 +10,8 @@ const logo = document.querySelector('.nav__logo');
 const favouritesBtn = document.querySelector('.nav__item--favourites');
 const favouritesBtnLink = favouritesBtn.querySelector('.nav__link');
 const numBadge = document.querySelector('.nav__item__num-badge');
+const infoBtn = document.querySelector('.nav__item--info');
+const settingsBtn = document.querySelector('.nav__item--settings');
 
 class navView {
   //  OPEN AND CLOSE MOBILE MENU
@@ -64,6 +68,18 @@ class navView {
       // hide badge
       numBadge.classList.remove('active');
     }
+  }
+
+  addHandlerInfoBtn() {
+    infoBtn.addEventListener('click', () => {
+      modalView.showInfoModal();
+    });
+  }
+
+  addHandlerSettingsBtn() {
+    settingsBtn.addEventListener('click', () => {
+      modalView.showSettingsModal();
+    });
   }
 }
 

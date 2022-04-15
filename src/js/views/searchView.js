@@ -5,7 +5,7 @@ import View from './view.js';
 // SELECT ELEMENTS
 const logo = document.querySelector('.nav__logo');
 const searchBar = document.querySelector('.nav__search');
-const overlay = document.querySelector('.overlay');
+const searchOverlay = document.querySelector('.overlay--search');
 const searchBarInput = document.querySelector('.nav__search input');
 const searchBtn = document.querySelector('.nav__search__btn');
 const clearBtn = document.querySelector('.nav__search__clear');
@@ -19,12 +19,12 @@ class SearchView extends View {
   openSearchBar() {
     logo.classList.add('hidden');
     searchBar.classList.add('active');
-    overlay.classList.add('active');
+    searchOverlay.classList.add('active');
   }
   closeSearchBar() {
     logo.classList.remove('hidden');
     searchBar.classList.remove('active');
-    overlay.classList.remove('active');
+    searchOverlay.classList.remove('active');
     // focus out of input field - this closes keyboard on mobile
     searchBarInput.blur();
   }
@@ -61,7 +61,7 @@ class SearchView extends View {
     });
 
     // when overlay clicked, close search
-    overlay.addEventListener('click', this.closeSearchBar);
+    searchOverlay.addEventListener('click', this.closeSearchBar);
 
     // when escape pressed, close search ( only when search already opened)
     document.addEventListener('keydown', e => {
