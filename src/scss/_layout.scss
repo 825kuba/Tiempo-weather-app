@@ -7,7 +7,7 @@
   // overflow: hidden;
   overflow: auto;
   padding: 1rem 0 2rem 0;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   scrollbar-color: $color-grey $color-dark-grey;
@@ -23,6 +23,10 @@
     &-thumb {
       background-color: $color-grey;
     }
+  }
+
+  &.smooth-scroll {
+    scroll-behavior: smooth;
   }
 }
 
@@ -135,14 +139,14 @@
   width: 100%;
   height: 100%;
   padding: 0;
-  background-color: rgba($color-black, 0.3);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  // background-color: rgba($color-black, 0.3);
+  // backdrop-filter: blur(5px);
+  // -webkit-backdrop-filter: blur(5px);
 
-  // BACKDROP-FILTER FALLBACK
-  @supports not ((backdrop-filter: none) or (-webkit-backdrop-filter: none)) {
-    & {
-      background-color: rgba($color-black, 0.6);
-    }
-  }
+  // // BACKDROP-FILTER FALLBACK
+  // @supports not ((backdrop-filter: none) or (-webkit-backdrop-filter: none)) {
+  //   & {
+  //     background-color: rgba($color-black, 0.6);
+  //   }
+  // }
 }

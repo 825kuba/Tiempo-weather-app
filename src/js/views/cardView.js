@@ -15,7 +15,8 @@ export class CardView {
     isDay,
     current,
     forecast,
-    isFavourite
+    isFavourite,
+    settings
   ) {
     // MAIN VARIABLES FOR CARD
     this.city = city;
@@ -26,6 +27,7 @@ export class CardView {
     this.current = current;
     this.forecast = forecast;
     this.isFavourite = isFavourite;
+    this.settings = settings;
 
     // UNIQUE ID
     this.id = helpers.generateId(this.city, this.region, this.country);
@@ -42,11 +44,56 @@ export class CardView {
     this.timeDayIndex = this.time.getDay();
     this.timeDay = helpers.daysOfWeek(this.timeDayIndex);
     this.timeDayFull = helpers.daysOfWeek(this.timeDayIndex, 'full');
-    // this.timeDateNumber = this.time.getDate();
-    // this.timeDate = helpers.dateEnding(this.timeDateNumber);
+
+    // // UPDATE SETTINGS
+    // this.updateSettings();
   }
 
-  // RENDER WESTHER CARD
+  updateSettings() {
+    this.temp = this.settings.temp === 'c' ? 'temp_c' : 'temp_f';
+    this.wind = this.settings.wind === 'kph' ? 'wind_kph' : 'wind_mph';
+    this.rain = this.settings.rain === 'mm' ? 'precip_mm' : 'precip_in';
+    this.displayHours =
+      this.settings.time === 'h24' ? this.timeHours : this.timeHours % 12;
+    this.amPm = this.timeHours <= 12 ? ' AM' : ' PM';
+    // sunrise / sunset time format
+    // API only return 12h format of sunset / sunrise, so we have to create our own version of 24h format
+
+    // get 24h format
+    this.sunriseShort = this.getSun24format(
+      this.forecast.forecastday[0].astro.sunrise
+    );
+    // settings for 12h format ? use original string, else use the 24h format we created
+    this.sunrise =
+      this.settings.time === 'h12'
+        ? this.forecast.forecastday[0].astro.sunrise
+        : this.sunriseShort;
+
+    // get 24h format
+    this.sunsetShort = this.getSun24format(
+      this.forecast.forecastday[0].astro.sunset
+    );
+    // settings for 12h format ? use original string, else use the 24h format we created
+    this.sunset =
+      this.settings.time === 'h12'
+        ? this.forecast.forecastday[0].astro.sunset
+        : this.sunsetShort;
+  }
+
+  getSun24format(str) {
+    // get AM/PM string
+    const amPm = str.slice(-3).slice(1).toUpperCase();
+    // get hours number out of string
+    const hours = +str.slice(0, 2);
+    // add 12 to hours if it's PM
+    const formatedHours = amPm === 'PM' ? hours + 12 : hours;
+    // delete AM/PM and hours from string
+    const formatedStr = str.slice(0, -3).slice(2);
+    // return final string
+    return `${formatedHours < 10 ? '0' : ''}${formatedHours}${formatedStr}`;
+  }
+
+  // RENDER WEATHER CARD
   renderCard() {
     // create markup for card
     const cardMarkup = `
@@ -54,9 +101,11 @@ export class CardView {
       <div class="card">
         <div class="card__toolbar">
           <time class="card__time-date">
-            <span class="card__time">${this.timeHours}${
+            <span class="card__time">${this.displayHours}${
       this.colon
-    }${helpers.addZero(this.timeMinutes)}</span>, ${this.timeDayFull}
+    }${helpers.addZero(this.timeMinutes)}${
+      this.settings.time === 'h24' ? '' : this.amPm
+    }</span>, ${this.timeDayFull}
           </time>
 
           <button class="card__favourite">
@@ -77,8 +126,8 @@ export class CardView {
 
             <div class="card__conditions">
               <div class="card__temp">${Math.round(
-                this.current.temp_c
-              )}&deg;C</div>
+                this.current[this.temp]
+              )}&deg;${this.settings.temp.toUpperCase()}</div>
               <img
                 class="card__icon"
                 src="${this.current.condition.icon}"
@@ -91,23 +140,23 @@ export class CardView {
               <div class="card__details   card__details--weather">
                 <div class="card__detail  card__detail--rain">
                   <i class="fa-solid fa-droplet"></i>
-                  ${this.current.precip_mm.toFixed(1)} mm
+                  ${this.current[this.rain].toFixed(1)} ${this.settings.rain}
                 </div>
                 <div class="card__detail  card__detail--wind">
                   <i class="fa-solid fa-wind"></i>
-                  ${Math.round(this.current.wind_kph)} km/h
+                  ${Math.round(this.current[this.wind])} ${this.settings.wind}
                 </div>
               </div>
               <div class="card__details   card__details--sun">
                 <div class="card__detail  card__detail--sunrise">
                   <i class="fa-solid fa-up-long"></i>
                   <i class="fa-solid fa-sun"></i>
-                  ${this.forecast.forecastday[0].astro.sunrise}
+                  ${this.sunrise}
                 </div>
                 <div class="card__detail  card__detail--sunset">
                   <i class="fa-solid fa-down-long"></i>
                   <i class="fa-solid fa-sun"></i>
-                  ${this.forecast.forecastday[0].astro.sunset}
+                  ${this.sunset}
                 </div>
               </div>
             </div>
@@ -158,16 +207,34 @@ export class CardView {
       // get hours and minutes
       const hours = helpers.addZero(time.getHours());
       const minutes = helpers.addZero(time.getMinutes());
+      function getAmPm(hour) {
+        const str = +hour < 12 ? ' AM' : ' PM';
+        if (+hour === 12 || +hour === 0) return '';
+        return str;
+      }
+      // const amPm = hours <= 12 ? ' AM' : ' PM';
+      function formatHours(hour) {
+        if (+hour === 0) return 'MIDNIGHT';
+        else if (+hour === 12) return 'NOON';
+        else return +hour % 12;
+      }
+      // const formatedHours = this.settings.time === 'h24' ? hours : hours % 12;
       //create markup
       const markup = `
         <div class="card__forecast__item">
-          <div class="card__forecast__name">${hours}:${minutes}</div>
+          <div class="card__forecast__name">${
+            this.settings.time === 'h24' ? hours : formatHours(hours)
+          }${this.settings.time === 'h24' ? `:${minutes}` : ''}${
+        this.settings.time === 'h24' ? '' : getAmPm(hours)
+      }</div>
           <div class="card__forecast__icon">
             <img
               src=${hour.condition.icon}
             />
           </div>
-          <div class="card__forecast__temp">${Math.round(hour.temp_c)}°C</div>
+          <div class="card__forecast__temp">${Math.round(
+            hour[this.temp]
+          )}&deg;${this.settings.temp.toUpperCase()}</div>
         </div>
       `;
       // insert it into the parent element
@@ -196,8 +263,8 @@ export class CardView {
                 />
               </div>
               <div class="card__forecast__temp">${Math.round(
-                day.day.avgtemp_c
-              )}°C</div>
+                day.day[`avg${this.temp}`]
+              )}&deg;${this.settings.temp.toUpperCase()}</div>
             </div>
           `;
       // insert it into the parent element
@@ -286,9 +353,11 @@ export class CardView {
       .getElementById(this.id)
       .querySelector(
         '.card__time-date'
-      ).innerHTML = `<span class="card__time">${this.timeHours}${
+      ).innerHTML = `<span class="card__time">${this.displayHours}${
       this.colon
-    }${helpers.addZero(this.timeMinutes)}</span>, ${this.timeDayFull}`;
+    }${helpers.addZero(this.timeMinutes)}${
+      this.settings.time === 'h24' ? '' : this.amPm
+    }</span>, ${this.timeDayFull}`;
   }
 
   // START INTERVAL
@@ -300,6 +369,7 @@ export class CardView {
   }
 
   cardInit(handler) {
+    this.updateSettings();
     this.renderCard();
     this.renderForecastHourly();
     this.renderForecastDaily();
@@ -307,6 +377,7 @@ export class CardView {
     this.addHandlerForecastBtns();
     this.startTime();
     this.addHandlerFavouriteBtn(handler);
+    // this.setBackgroundPic();
   }
 
   // HANDLER FOR CLICKING STAR ICON ON CARD
@@ -360,4 +431,11 @@ export class CardView {
   //     .querySelector('.fa-star')
   //     .classList.add('fa-regular');
   // }
+
+  setBackgroundPic() {
+    const cardBox = document.getElementById(this.id).closest('.card-box');
+    cardBox.style.background = `
+    url('https://source.unsplash.com/random/?${this.current.condition.text}') center center / cover no-repeat
+    `;
+  }
 }

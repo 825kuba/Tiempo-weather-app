@@ -6,7 +6,6 @@ const allCardsBox = document.querySelector('.all-cards');
 const mainBox = document.querySelector('.main-box');
 const leftArrow = document.querySelector('.fa-chevron-left');
 const rightArrow = document.querySelector('.fa-chevron-right');
-const spinner = document.querySelector('.spinner');
 const indexDots = document.querySelector('.cards-nav__index-dots');
 
 class MainView extends View {
@@ -105,6 +104,7 @@ class MainView extends View {
     mainBox.scrollLeft = 0;
     // reset scroll index
     this.scrollIndex = 0;
+    this.prevScrollIndex = 0;
     // set max scroll index - array length - 1
     this.maxScrollIndex = num - 1;
     // activate arrows if there is more then 1 card
@@ -138,23 +138,29 @@ class MainView extends View {
     indexDots.classList.add('active');
   }
 
+  // WHAT HAPPENS WHEN DOTS ARE CLICKED
+  indexDotsHandler(e) {
+    // if the target isn't index-dot, return
+    const target = e.target.closest('.cards-nav__index-dot');
+    if (!target) return;
+    // get index of the clicked dot
+    const clickedIndex = Array.from(
+      document.querySelectorAll('.cards-nav__index-dot')
+    ).indexOf(target);
+    console.log('clicked', clickedIndex);
+    // calculate the scroll value: the current scrollIndex minus the clickedIndex to get the value of how much we need to scroll, and times it with -1 to get the correct scroll direction
+    const scrollValue = (this.scrollIndex - clickedIndex) * -1;
+    console.log('scroll by:', scrollValue);
+    // scroll the mainBox element
+    this.sideScroll(scrollValue);
+  }
+
+  // we have to create this variable to be able to add AND remove event listener on index dots
+  boundIndexDotsHandler = this.indexDotsHandler.bind(this);
+
   addHandlerIndexDots() {
     // set event listener on index-dots element
-    document
-      .querySelector('.cards-nav__index-dots')
-      .addEventListener('click', e => {
-        // if the target isn't index-dot, return
-        const target = e.target.closest('.cards-nav__index-dot');
-        if (!target) return;
-        // get index of the clicked dot
-        const clickedIndex = Array.from(
-          document.querySelectorAll('.cards-nav__index-dot')
-        ).indexOf(target);
-        // calculate the target index: the current scrollIndex minus the clickedIndex to get the value of how muhc we need to scroll, and times it with -1 to get the correct scroll direction
-        const targetIndex = (this.scrollIndex - clickedIndex) * -1;
-        // scroll the mainBox element
-        this.sideScroll(targetIndex);
-      });
+    indexDots.addEventListener('click', this.boundIndexDotsHandler);
   }
 
   // CLEAR MAIN VIEW
@@ -167,15 +173,11 @@ class MainView extends View {
     // hide arrows
     leftArrow.classList.remove('active');
     rightArrow.classList.remove('active');
-    // empty index dots and hide parent element
+    // remove event listener from dots, empty and hide the element
+    indexDots.removeEventListener('click', this.boundIndexDotsHandler);
     indexDots.innerHTML = '';
     indexDots.classList.remove('active');
   }
-
-  // RENDER SPINNER
-  // renderSpinner() {
-  //   spinner.classList.toggle('active');
-  // }
 
   // RENDER GIVEN ERROR
   renderError(err) {
@@ -193,6 +195,20 @@ class MainView extends View {
 
   showInfoModal() {
     infoModal.classList.toggle('active');
+  }
+
+  getNumberOfCardsDisplayed() {
+    return Array.from(allCardsBox.querySelectorAll('.card-box')).length;
+  }
+
+  setSmoothScrollOn() {
+    mainBox.classList.add('smooth-scroll');
+    console.log('smooth scroll on');
+  }
+
+  setSmoothScrollOff() {
+    mainBox.classList.remove('smooth-scroll');
+    console.log('smooth scroll off');
   }
 }
 

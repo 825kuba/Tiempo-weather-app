@@ -59,7 +59,8 @@ async function controlForecastByQuery(query) {
       data.current.is_day,
       data.current,
       data.forecast,
-      isFavourite
+      isFavourite,
+      model.state.settings.units
     );
     // clear view
     mainView.clearView();
@@ -68,6 +69,7 @@ async function controlForecastByQuery(query) {
   } catch (err) {
     // error handling
     mainView.clearView();
+    console.error(err);
     mainView.renderError(err.message);
   }
 }
@@ -130,7 +132,8 @@ async function controlForecastForFavourites() {
         data.current.is_day,
         data.current,
         data.forecast,
-        isFavourite
+        isFavourite,
+        model.state.settings.units
       );
       model.state.favourites.push(card);
     });
@@ -148,6 +151,49 @@ async function controlForecastForFavourites() {
   }
 }
 
+function controlSettings(newSettings) {
+  // update state object
+  model.state.settings = newSettings;
+  // console.log(model.state.settings);
+  // save state object to local storage
+  model.setLocalStorage();
+  // set smooth scroll
+  // if (model.state.settings.smoothScroll) mainView.setSmoothScrollOn();
+  // else mainView.setSmoothScrollOff();
+  modalView.initSettings(model.state.settings);
+  // get number of cards being displayed
+  const numOfCards = mainView.getNumberOfCardsDisplayed();
+  // if there are no cards displayed, no action is needed
+  if (!numOfCards) return;
+  // if there is one card displayed
+  if (numOfCards === 1) {
+    // clear view
+    mainView.clearView();
+    //update settings for card
+    model.state.mainCard.settings = model.state.settings.units;
+    // render card again
+    model.state.mainCard.cardInit(model.addOrRemoveCard);
+  }
+  // if there is more than 1 card displayed
+  if (numOfCards > 1) {
+    // clear main view
+    mainView.clearView();
+    // for each card
+    model.state.favourites.forEach(card => {
+      //update settings for card
+      card.settings = model.state.settings.units;
+      // render card again
+      card.cardInit(model.addOrRemoveCard);
+    });
+    // reset the scrolling
+    mainView.initSideScroll(model.state.favourites.length);
+  }
+}
+
+function controlResetSettings() {
+  modalView.initSettings(model.state.settings);
+}
+
 function init() {
   model.getLocalStorage();
   navView.addHandlerMobileMenu();
@@ -156,7 +202,11 @@ function init() {
   navView.displayNumOfFavourites(model.state.favourites.length);
   navView.addHandlerInfoBtn();
   navView.addHandlerSettingsBtn();
-  modalView.addHandlerModalOverlay();
+  modalView.initSettings(model.state.settings);
+  modalView.addHandlerSettings(controlSettings);
+  modalView.addHandlerModalOverlay(controlResetSettings);
+  modalView.addHandlerCLoseBtn(controlResetSettings);
+  modalView.addHandlerEscapeKey(controlResetSettings);
   searchView.addHandlerSearchControls();
   searchView.addHandlerSearchInput(controlSearchResults);
   searchView.addHandlerSearchResult(controlForecastByQuery);
@@ -164,11 +214,6 @@ function init() {
   // controlForecastByPosition();
   searchView.addHandlerLocationBtn(controlForecastByPosition);
   mainView.addHandlersSideScrolling();
-
-  document.querySelector('.modal__settings').addEventListener('change', e => {
-    console.log(e.target.checked);
-    console.log(e.target);
-  });
 }
 
 init();

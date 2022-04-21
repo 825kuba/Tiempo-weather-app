@@ -15,9 +15,9 @@ export const state = {
       temp: 'c',
       wind: 'kph',
       rain: 'mm',
+      time: 'h24',
     },
-    time: '24',
-    scrollBehaviour: 'smooth',
+    smoothScroll: false,
   },
 };
 
@@ -98,6 +98,8 @@ export const addOrRemoveCard = clickedCard => {
 // SAVING FAVOURITES DATA TO LOCAL STORAGE
 export const setLocalStorage = () => {
   localStorage.setItem('tiempoFavourites', JSON.stringify(state.favourites));
+
+  localStorage.setItem('tiempoSettings', JSON.stringify(state.settings));
 };
 
 // GETTING FAVOURITES DATA FROM LOCAL STORAGE
@@ -105,4 +107,7 @@ export const getLocalStorage = () => {
   const favourites = localStorage.getItem('tiempoFavourites');
   if (favourites && favourites.length)
     state.favourites = JSON.parse(favourites);
+
+  const settings = localStorage.getItem('tiempoSettings');
+  if (settings) state.settings = JSON.parse(settings);
 };

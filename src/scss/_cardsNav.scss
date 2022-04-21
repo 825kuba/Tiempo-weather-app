@@ -1,7 +1,6 @@
 .cards-nav {
   @include flex;
   justify-content: space-evenly;
-  padding: 1rem 2rem;
   position: relative;
 
   &__index-dots {
@@ -10,9 +9,11 @@
     flex-wrap: wrap;
     gap: 1rem;
     display: none;
+    padding: 0;
 
     &.active {
       display: flex;
+      padding: 1rem 2rem;
     }
   }
 

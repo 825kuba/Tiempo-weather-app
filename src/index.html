@@ -179,7 +179,7 @@
     </section>
 
     <section class="modal modal--settings">
-      <button class="modal__close">&times;</button>
+      <button class="modal__close" type="reset">&times;</button>
       <h2 class="modal__heading"><i class="fa-solid fa-gear"></i> Settings</h2>
 
       <form action="#" class="modal__settings">
@@ -187,7 +187,7 @@
           <h4 class="modal__section-name">Temperature:</h4>
           <div class="modal__options">
             <label class="modal__option">
-              <input type="radio" name="temp" value="c" checked />
+              <input type="radio" name="temp" value="c" />
               <div class="modal__radio"></div>
               °C
             </label>
@@ -203,14 +203,14 @@
           <h4 class="modal__section-name">Wind:</h4>
           <div class="modal__options">
             <label class="modal__option">
-              <input type="radio" name="wind" value="kph" checked />
+              <input type="radio" name="wind" value="kph" />
               <div class="modal__radio"></div>
-              km/h
+              kph
             </label>
             <label class="modal__option">
               <input type="radio" name="wind" value="mph" />
               <div class="modal__radio"></div>
-              m/h
+              mph
             </label>
           </div>
         </fieldset>
@@ -219,7 +219,7 @@
           <h4 class="modal__section-name">Rain:</h4>
           <div class="modal__options">
             <label class="modal__option">
-              <input type="radio" name="rain" value="mm" checked />
+              <input type="radio" name="rain" value="mm" />
               <div class="modal__radio"></div>
               mm
             </label>
@@ -235,13 +235,13 @@
           <h4 class="modal__section-name">Time format:</h4>
           <div class="modal__options">
             <label class="modal__option">
-              <input type="radio" name="time" value="24" checked />
+              <input type="radio" name="time" value="h24" />
               <div class="modal__radio"></div>
               24h
             </label>
 
             <label class="modal__option">
-              <input type="radio" name="time" value="12" />
+              <input type="radio" name="time" value="h12" />
               <div class="modal__radio"></div>
               12h
             </label>
@@ -253,14 +253,16 @@
           <label class="modal__switch">
             <input
               type="checkbox"
-              name="scroll"
-              value="on"
-              checked
+              name="smoothScroll"
               class="modal__switch__btn"
             />
             <div class="modal__switch__bg"></div>
           </label>
         </fieldset>
+
+        <button class="modal__submit" type="submit" disabled>
+          Save changes
+        </button>
       </form>
     </section>
   </body>
