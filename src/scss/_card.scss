@@ -1,7 +1,7 @@
 .card {
   width: 100%;
   min-height: 100%;
-  max-width: 96rem;
+  max-width: $card-max-width;
   position: relative;
   z-index: $z-1;
   display: flex;
@@ -15,7 +15,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: $color-blue;
+    background-color: rgba($color-blue, 0.9);
     padding: 0.5rem 1rem;
   }
 
@@ -48,13 +48,13 @@
     padding: 2rem 1rem 1rem 1rem;
 
     background-color: rgba($color-blue, 0.5);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 
     // BACKDROP-FILTER FALLBACK
     @supports not ((backdrop-filter: none) or (-webkit-backdrop-filter: none)) {
       & {
-        background-color: rgba($color-blue, 0.9);
+        background-color: rgba($color-blue, 0.8);
       }
     }
   }
@@ -150,6 +150,7 @@
 
     &--sun {
       display: none;
+      width: max-content;
       @media only screen and (min-width: $bp-large) {
         display: flex;
       }

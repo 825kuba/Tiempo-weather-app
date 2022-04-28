@@ -14,21 +14,25 @@ class ModalView {
   showInfoModal() {
     modalOverlay.classList.add('active');
     infoModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 
   hideInfoModal() {
     modalOverlay.classList.remove('active');
     infoModal.classList.remove('active');
+    document.body.style.overflow = 'initial';
   }
 
   showSettingsModal() {
     modalOverlay.classList.add('active');
     settingsModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 
   hideSettingsModal() {
     modalOverlay.classList.remove('active');
     settingsModal.classList.remove('active');
+    document.body.style.overflow = 'initial';
   }
 
   addHandlerModalOverlay(handler) {

@@ -11,13 +11,27 @@
   </head>
   <body>
     <header class="nav">
-      <img src="./img/logo-white.png" alt="tiempo logo" class="nav__logo" />
+      <img
+        src="./img/logo-white.png"
+        alt="app logo"
+        class="nav__logo"
+        width="178px"
+        height="39px"
+      />
 
       <form class="nav__search">
-        <button type="button" class="nav__search__btn">
+        <button
+          type="button"
+          class="nav__search__btn"
+          aria-label="submit the search query"
+        >
           <i class="fa-solid fa-magnifying-glass"></i>
         </button>
-        <button type="button" class="nav__search__clear">
+        <button
+          type="button"
+          class="nav__search__clear"
+          aria-label="clear input field or close the search bar"
+        >
           <i class="fa-solid fa-xmark"></i>
         </button>
         <input
@@ -40,7 +54,7 @@
         </ul>
       </form>
 
-      <button class="nav__hamburger">
+      <button class="nav__hamburger" aria-label="open and close mobile menu">
         <div class="bar"></div>
         <div class="bar"></div>
         <div class="bar"></div>
@@ -48,14 +62,25 @@
 
       <ul class="nav__links">
         <li class="nav__item nav__item--favourites">
-          <a href="#" class="nav__link"><i class="fa-regular fa-star"></i></a>
-          <span class="nav__item__num-badge">0</span>
+          <a
+            href="#"
+            class="nav__link"
+            aria-label="show weather for favourite places"
+            ><i class="fa-regular fa-star"></i
+          ></a>
+          <span
+            class="nav__item__num-badge"
+            aria-label="number of favourite places"
+            >0</span
+          >
         </li>
         <li class="nav__item nav__item--settings">
-          <a href="#" class="nav__link"><i class="fa-solid fa-gear"></i></a>
+          <a href="#" class="nav__link" aria-label="open settings"
+            ><i class="fa-solid fa-gear"></i
+          ></a>
         </li>
         <li class="nav__item nav__item--info">
-          <a href="#" class="nav__link"
+          <a href="#" class="nav__link" aria-label="open information panel"
             ><i class="fa-solid fa-circle-info"></i
           ></a>
         </li>
@@ -65,14 +90,21 @@
     <div class="overlay overlay--search"></div>
 
     <nav class="cards-nav">
-      <i class="fa-solid fa-chevron-left"></i>
+      <button class="scroll-arrow scroll-arrow--left" aria-label="scroll left">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
 
       <div class="cards-nav__index-dots">
         <!-- <button class="cards-nav__index-dot active"></button>
         <button class="cards-nav__index-dot"></button> -->
       </div>
 
-      <i class="fa-solid fa-chevron-right"></i>
+      <button
+        class="scroll-arrow scroll-arrow--right"
+        aria-label="scroll right"
+      >
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
     </nav>
 
     <main class="main-box">
@@ -170,7 +202,9 @@
     <div class="overlay overlay--modal"></div>
 
     <section class="modal modal--info">
-      <button class="modal__close">&times;</button>
+      <button class="modal__close" aria-label="close information panel">
+        &times;
+      </button>
       <img src="./img/logo-black.png" alt="tiempo logo" class="info__logo" />
       <p>
         Tiempo weather is a single page application that I built to practice CSS
@@ -179,7 +213,9 @@
     </section>
 
     <section class="modal modal--settings">
-      <button class="modal__close" type="reset">&times;</button>
+      <button class="modal__close" type="reset" aria-label="close settings">
+        &times;
+      </button>
       <h2 class="modal__heading"><i class="fa-solid fa-gear"></i> Settings</h2>
 
       <form action="#" class="modal__settings">
@@ -187,12 +223,22 @@
           <h4 class="modal__section-name">Temperature:</h4>
           <div class="modal__options">
             <label class="modal__option">
-              <input type="radio" name="temp" value="c" />
+              <input
+                type="radio"
+                name="temp"
+                value="c"
+                aria-label="set temperature units to degreees celsius"
+              />
               <div class="modal__radio"></div>
               °C
             </label>
             <label class="modal__option">
-              <input type="radio" name="temp" value="f" />
+              <input
+                type="radio"
+                name="temp"
+                value="f"
+                aria-label="set temperature units to degreees fahrenheit"
+              />
               <div class="modal__radio"></div>
               °F
             </label>
@@ -203,12 +249,22 @@
           <h4 class="modal__section-name">Wind:</h4>
           <div class="modal__options">
             <label class="modal__option">
-              <input type="radio" name="wind" value="kph" />
+              <input
+                type="radio"
+                name="wind"
+                value="kph"
+                aria-label="set wind units to kilometers per hour"
+              />
               <div class="modal__radio"></div>
               kph
             </label>
             <label class="modal__option">
-              <input type="radio" name="wind" value="mph" />
+              <input
+                type="radio"
+                name="wind"
+                value="mph"
+                aria-label="set wind units to miles per hour"
+              />
               <div class="modal__radio"></div>
               mph
             </label>
@@ -219,12 +275,22 @@
           <h4 class="modal__section-name">Rain:</h4>
           <div class="modal__options">
             <label class="modal__option">
-              <input type="radio" name="rain" value="mm" />
+              <input
+                type="radio"
+                name="rain"
+                value="mm"
+                aria-label="set rain units to millimeters"
+              />
               <div class="modal__radio"></div>
               mm
             </label>
             <label class="modal__option">
-              <input type="radio" name="rain" value="in" />
+              <input
+                type="radio"
+                name="rain"
+                value="in"
+                aria-label="set rain units to inches"
+              />
               <div class="modal__radio"></div>
               in
             </label>
@@ -235,13 +301,23 @@
           <h4 class="modal__section-name">Time format:</h4>
           <div class="modal__options">
             <label class="modal__option">
-              <input type="radio" name="time" value="h24" />
+              <input
+                type="radio"
+                name="time"
+                value="h24"
+                aria-label="set time format to 24 hours"
+              />
               <div class="modal__radio"></div>
               24h
             </label>
 
             <label class="modal__option">
-              <input type="radio" name="time" value="h12" />
+              <input
+                type="radio"
+                name="time"
+                value="h12"
+                aria-label="set time format to 12 hours"
+              />
               <div class="modal__radio"></div>
               12h
             </label>
@@ -255,12 +331,18 @@
               type="checkbox"
               name="smoothScroll"
               class="modal__switch__btn"
+              aria-label="set smooth scrolling on and off"
             />
             <div class="modal__switch__bg"></div>
           </label>
         </fieldset>
 
-        <button class="modal__submit" type="submit" disabled>
+        <button
+          class="modal__submit"
+          type="submit"
+          disabled
+          aria-label="submit changes to settings"
+        >
           Save changes
         </button>
       </form>

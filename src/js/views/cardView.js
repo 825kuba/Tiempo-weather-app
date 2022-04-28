@@ -1,6 +1,7 @@
 'use strict';
 
 import * as helpers from '../helpers.js';
+import mainView from './mainView.js';
 import navView from './navView.js';
 
 //SELECT ELEMENTS
@@ -45,8 +46,7 @@ export class CardView {
     this.timeDay = helpers.daysOfWeek(this.timeDayIndex);
     this.timeDayFull = helpers.daysOfWeek(this.timeDayIndex, 'full');
 
-    // // UPDATE SETTINGS
-    // this.updateSettings();
+    this.backgroundCode;
   }
 
   updateSettings() {
@@ -377,7 +377,7 @@ export class CardView {
     this.addHandlerForecastBtns();
     this.startTime();
     this.addHandlerFavouriteBtn(handler);
-    // this.setBackgroundPic();
+    this.setBackgroundCode();
   }
 
   // HANDLER FOR CLICKING STAR ICON ON CARD
@@ -432,10 +432,71 @@ export class CardView {
   //     .classList.add('fa-regular');
   // }
 
-  setBackgroundPic() {
-    const cardBox = document.getElementById(this.id).closest('.card-box');
-    cardBox.style.background = `
-    url('https://source.unsplash.com/random/?${this.current.condition.text}') center center / cover no-repeat
-    `;
+  // code used for setting background when card is being displayed
+  setBackgroundCode() {
+    if (this.current.condition.code === 1000) this.backgroundCode = 'clear';
+    if (this.current.condition.code === 1003)
+      this.backgroundCode = 'partly-cloudy';
+    if (this.current.condition.code === 1006) this.backgroundCode = 'cloudy';
+    if (this.current.condition.code === 1009) this.backgroundCode = 'overcast';
+    if (
+      this.current.condition.code === 1030 ||
+      this.current.condition.code === 1135 ||
+      this.current.condition.code === 1147
+    )
+      this.backgroundCode = 'mist';
+    if (
+      this.current.condition.code === 1063 ||
+      this.current.condition.code === 1072 ||
+      this.current.condition.code === 1150 ||
+      this.current.condition.code === 1153 ||
+      this.current.condition.code === 1168 ||
+      this.current.condition.code === 1171 ||
+      this.current.condition.code === 1180 ||
+      this.current.condition.code === 1183 ||
+      this.current.condition.code === 1186 ||
+      this.current.condition.code === 1189 ||
+      this.current.condition.code === 1192 ||
+      this.current.condition.code === 1195 ||
+      this.current.condition.code === 1198 ||
+      this.current.condition.code === 1201 ||
+      this.current.condition.code === 1240 ||
+      this.current.condition.code === 1243 ||
+      this.current.condition.code === 1246
+    )
+      this.backgroundCode = 'rain';
+    if (
+      this.current.condition.code === 1066 ||
+      this.current.condition.code === 1114 ||
+      this.current.condition.code === 1117 ||
+      this.current.condition.code === 1210 ||
+      this.current.condition.code === 1213 ||
+      this.current.condition.code === 1216 ||
+      this.current.condition.code === 1219 ||
+      this.current.condition.code === 1222 ||
+      this.current.condition.code === 1225 ||
+      this.current.condition.code === 1255 ||
+      this.current.condition.code === 1258
+    )
+      this.backgroundCode = 'snow';
+    if (
+      this.current.condition.code === 1069 ||
+      this.current.condition.code === 1204 ||
+      this.current.condition.code === 1207 ||
+      this.current.condition.code === 1237 ||
+      this.current.condition.code === 1249 ||
+      this.current.condition.code === 1252 ||
+      this.current.condition.code === 1261 ||
+      this.current.condition.code === 1264
+    )
+      this.backgroundCode = 'sleet';
+    if (
+      this.current.condition.code === 1087 ||
+      this.current.condition.code === 1273 ||
+      this.current.condition.code === 1276 ||
+      this.current.condition.code === 1279 ||
+      this.current.condition.code === 1282
+    )
+      this.backgroundCode = 'thunder';
   }
 }

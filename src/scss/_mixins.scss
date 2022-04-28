@@ -28,3 +28,27 @@
   flex-direction: column;
   align-items: flex-start;
 }
+
+@mixin random-background($width, $height) {
+  background-color: $color-dark-grey;
+  background-image: url('../img/newbg/bg-placeholder.png');
+  background-image: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.4) 100%
+    ),
+    url('https://source.unsplash.com/random/#{$width}x#{$height}/?weather');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+@mixin pre-set-background($size) {
+  background-image: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0) 75%,
+      rgba(0, 0, 0, 0.9) 100%
+    ),
+    url('../img/bg-#{$size}.jpg');
+}

@@ -15,6 +15,7 @@ $shadow-light: 0px 5px 8px 0px rgba(0, 0, 0, 0.24);
 
 //VARIABLES
 $header-height: 6rem;
+$card-max-width: 96rem;
 
 // BREAKPOINTS
 $bp-medium: 37.5em; //600px
@@ -29,8 +30,8 @@ $z-4: 400; // search
 $z-5: 500; // modal overlay
 $z-6: 600; // modals
 
-$bg-img: url('https://source.unsplash.com/random/1024x768/?weather') center
-  center / cover no-repeat;
+// $bg-img: url('https://source.unsplash.com/random/1024x768/?weather') center
+//   center / cover no-repeat;
 
 *,
 *:before,
@@ -44,50 +45,49 @@ html {
   font-family: 'Open Sans';
   font-size: 62.5%;
 
-  @media only screen and (min-width: $bp-medium) {
-    background: linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0) 70%,
-        rgba(0, 0, 0, 0.9) 100%
-      ),
-      url('https://source.unsplash.com/random/1280x1024/?weather') center center /
-        cover no-repeat;
-  }
-
   @media only screen and (min-width: $bp-large) {
     font-size: 68.75%;
-    background: linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0) 70%,
-        rgba(0, 0, 0, 0.9) 100%
-      ),
-      url('https://source.unsplash.com/random/1920x1080/?weather') center center /
-        cover no-repeat;
   }
 
   @media only screen and (min-width: $bp-xlarge) {
     font-size: 75%;
   }
+
+  // @media only screen and (max-width: $bp-medium) {
+  //   background-image: url('https://source.unsplash.com/random/720x576/?weather');
+  // }
 }
 
 body {
   min-height: 100vh;
   box-sizing: border-box;
-  background: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0) 70%,
-      rgba(0, 0, 0, 0.9) 100%
-    ),
-    url('https://source.unsplash.com/random/1024x768/?weather') center center /
-      cover no-repeat;
 
-  // background: linear-gradient(
-  //     0deg,
-  //     rgba(0, 0, 0, 0) 70%,
-  //     rgba(0, 0, 0, 0.9) 100%
-  //   ),
-  //   url('https://source.unsplash.com/random/1280×720/?weather') center center /
-  //     cover no-repeat;
+  background-color: $color-dark-grey;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  transition: background-image 0.5s ease;
+
+  // @include random-background(640, 960);
+
+  // @media only screen and (min-width: $bp-medium) {
+  //   @include random-background(1920, 1280);
+  // }
+
+  // @media only screen and (min-width: $bp-xlarge) {
+  //   @include random-background(2400, 1600);
+  // }
+
+  // @include pre-set-background('small');
+
+  // @media only screen and (min-width: $bp-medium) {
+  //   @include pre-set-background('medium');
+  // }
+
+  // @media only screen and (min-width: $bp-xlarge) {
+  //   @include pre-set-background('large');
+  // }
 
   display: grid;
   grid-template-rows: max-content min-content 1fr;

@@ -5,6 +5,7 @@ import { CardView } from './views/cardView.js';
 import mainView from './views/mainView.js';
 import * as helpers from './helpers.js';
 import modalView from './views/modalView.js';
+// import bg from '../img/bg/medium/day/clear.jpg'
 
 // CONTROL DYNAMIC DISPLAYING OF SEARCH RESULTS IN SEARH LIST
 async function controlSearchResults(query) {
@@ -27,6 +28,37 @@ async function controlSearchResults(query) {
   }
 }
 
+async function controlForecastForMainCard(query) {
+  // get data from api
+  const data = await model.getForecastData(query);
+  //check for already existing card in favourites array
+  const isFavourite = model.state.favourites.some(
+    card =>
+      card.id ===
+      helpers.generateId(
+        data.location.name,
+        data.location.region,
+        data.location.country
+      )
+  );
+  // save data to state object
+  model.state.mainCard = new CardView(
+    data.location.name,
+    data.location.region,
+    data.location.country,
+    data.location.localtime,
+    data.current.is_day,
+    data.current,
+    data.forecast,
+    isFavourite,
+    model.state.settings.units
+  );
+  // clear view
+  mainView.clearView();
+  // render new card
+  model.state.mainCard.cardInit(model.addOrRemoveCard);
+}
+
 // CONTOL GETTING FORECAST DATA AFTER CLICKING ON A SEARCH RESULT OR SUBMITING SEARCH FORM
 async function controlForecastByQuery(query) {
   try {
@@ -38,38 +70,13 @@ async function controlForecastByQuery(query) {
     mainView.clearView();
     // show spinner
     mainView.renderSpinner();
-    // get data from api
-    const data = await model.getForecastData(query);
-    //check for already existing card in favourites array
-    const isFavourite = model.state.favourites.some(
-      card =>
-        card.id ===
-        helpers.generateId(
-          data.location.name,
-          data.location.region,
-          data.location.country
-        )
-    );
-    // save data to state object
-    model.state.mainCard = new CardView(
-      data.location.name,
-      data.location.region,
-      data.location.country,
-      data.location.localtime,
-      data.current.is_day,
-      data.current,
-      data.forecast,
-      isFavourite,
-      model.state.settings.units
-    );
-    // clear view
-    mainView.clearView();
-    // render new card
-    model.state.mainCard.cardInit(model.addOrRemoveCard);
+
+    await controlForecastForMainCard(query);
+    mainView.setBackground(model.state.mainCard);
   } catch (err) {
     // error handling
     mainView.clearView();
-    console.error(err);
+    // console.error(err);
     mainView.renderError(err.message);
   }
 }
@@ -77,6 +84,10 @@ async function controlForecastByQuery(query) {
 // CONTORL GETTING FORECAST DATA BASED ON USER'S LOCATION
 async function controlForecastByPosition() {
   try {
+    // clear search input field and results list
+    searchView.clearSearch();
+    // close search bar
+    searchView.closeSearchBar();
     // clear view
     mainView.clearView();
     // show spinner
@@ -86,7 +97,8 @@ async function controlForecastByPosition() {
     // save them in string
     const query = `${position.coords.latitude},${position.coords.longitude}`;
     // run function with the string as argument
-    controlForecastByQuery(query);
+    await controlForecastForMainCard(query);
+    mainView.setBackground(model.state.mainCard);
   } catch (err) {
     // if getUserPosition function returned rejected promise, then clear view and display error based on the error object's code
     mainView.clearView();
@@ -94,6 +106,7 @@ async function controlForecastByPosition() {
     if (err.code === 2) mainView.renderError('Geolocation request failed :(');
     if (err.code === 3)
       mainView.renderError('Geolocation request timed out :(');
+    else mainView.renderError(err.message);
   }
 }
 
@@ -144,6 +157,7 @@ async function controlForecastForFavourites() {
       card.cardInit(model.addOrRemoveCard);
     });
     mainView.initSideScroll(model.state.favourites.length);
+    mainView.setBackground(model.state.favourites[0]);
   } catch (err) {
     // error handling
     mainView.clearView();
@@ -213,7 +227,13 @@ function init() {
   searchView.addHandlerSubmitForm(controlForecastByQuery);
   // controlForecastByPosition();
   searchView.addHandlerLocationBtn(controlForecastByPosition);
-  mainView.addHandlersSideScrolling();
+  mainView.addHandlersSideScrolling(model.state);
+  // const url = require('../img/bg/small/night/clear.jpg');
+  // document.body.style.backgroundImage = `url(${url})`;
+
+  // window.addEventListener('resize', () => {
+  //   console.log(window.innerWidth);
+  // });
 }
 
 init();

@@ -1,5 +1,6 @@
 .nav {
-  // border: 1px solid red;
+  // background-color: rgba($color-black, 0.2);
+  // background-color: $color-dark-grey;
   position: relative;
   height: 6rem;
   display: flex;
@@ -46,6 +47,10 @@
       color: $color-white;
       font-size: 1.6rem;
       width: 0;
+
+      &::placeholder {
+        color: rgba($color-white, 0.6);
+      }
 
       // &:focus {
       //   width: 100%;
@@ -132,7 +137,7 @@
       line-height: 1.2;
 
       &:hover {
-        background-color: $color-grey;
+        background-color: rgba($color-grey, 0.3);
         // color: $color-white;
       }
 
@@ -155,6 +160,10 @@
         & .fa-location-arrow {
           color: $color-blue;
         }
+      }
+
+      &.highlight {
+        background-color: rgba($color-grey, 0.3);
       }
     }
   }

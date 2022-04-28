@@ -4,8 +4,8 @@ import View from './view.js';
 
 const allCardsBox = document.querySelector('.all-cards');
 const mainBox = document.querySelector('.main-box');
-const leftArrow = document.querySelector('.fa-chevron-left');
-const rightArrow = document.querySelector('.fa-chevron-right');
+const leftArrow = document.querySelector('.scroll-arrow--left');
+const rightArrow = document.querySelector('.scroll-arrow--right');
 const indexDots = document.querySelector('.cards-nav__index-dots');
 
 class MainView extends View {
@@ -13,6 +13,8 @@ class MainView extends View {
   prevScrollIndex = 0;
   scrollIndex = 0;
   maxScrollIndex = 0;
+  index = 0;
+  backgroundTimer;
   ////////////// SIDE SCROLLIING ARROWS //////////////
   ///////////////////////////////////////////////
 
@@ -26,7 +28,7 @@ class MainView extends View {
   }
 
   // ADD ALL HANDLERS FOR SCROLLING
-  addHandlersSideScrolling() {
+  addHandlersSideScrolling(state) {
     // 1) SET EVENT LISTENERS ON ARROW BUTTONS AND ARROW KEYS - SCROLL ON CLICK / PRESS
     leftArrow.addEventListener('click', () => {
       this.sideScroll(-1);
@@ -65,9 +67,19 @@ class MainView extends View {
       this.prevScrollIndex = this.scrollIndex;
       // calculate new current scroll index
       this.scrollIndex = Math.round(scrollPosition / cardBoxWidth);
-      // only after current index is different from previous index, adjust the arrows
+      // only after current index is different from previous index, do the rest of stuff
+      console.log('index', this.scrollIndex);
       if (this.prevScrollIndex === this.scrollIndex) return;
+      // adjust arrows
       this.adjustArrows();
+      // if smooth scroll is on, set background image after timeout (to prevent changing picture X amount of times, i.e. when scrolling over 4 cards, the image would change 4 times)
+      if (state.settings.smoothScroll) {
+        clearTimeout(this.backgroundTimer);
+        this.backgroundTimer = setTimeout(() => {
+          this.setBackground(state.favourites[this.scrollIndex]);
+        }, 200);
+        // if smooth scroll is off, just change the background without any timer
+      } else this.setBackground(state.favourites[this.scrollIndex]);
     });
   }
 
@@ -209,6 +221,32 @@ class MainView extends View {
   setSmoothScrollOff() {
     mainBox.classList.remove('smooth-scroll');
     console.log('smooth scroll off');
+  }
+
+  setBackground(card) {
+    console.log('changing background');
+    // get screen size
+    const res = window.innerWidth;
+    let size;
+    if (res <= 600) size = 'small';
+    if (res > 600 && res <= 1400) size = 'medium';
+    if (res > 1400) size = 'large';
+    // find out if it's day or night
+    const isDay = card.isDay ? 'day' : 'night';
+    // get image name based on weather code
+
+    const bgUrl = `../../img/bg/${size}/${isDay}/${card.backgroundCode}.jpg`;
+
+    // const cardBox = document.getElementById(card.id);
+
+    document.body.style.backgroundImage = `
+      linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0) 70%,
+        rgba(0, 0, 0, 0.9) 100%
+      ),
+      url(${bgUrl})
+    `;
   }
 }
 
