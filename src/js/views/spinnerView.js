@@ -1,9 +1,9 @@
 'use strict';
 
-export default class View {
+export default class SpinnerView {
   renderSpinner() {
     this.parentElement.innerHTML = `
-      <div class="spinner">
+      <div class="spinner" aria-label="Loading">
         <i class="fa-solid fa-spinner"></i>
       </div>
     `;

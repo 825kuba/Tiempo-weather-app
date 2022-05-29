@@ -1,0 +1,150 @@
+// search box styles
+.nav__search {
+  position: relative;
+  z-index: $z-4;
+  @include flex-start;
+  flex-direction: row-reverse;
+  gap: 1rem;
+  margin-left: auto;
+  height: 100%;
+  border-radius: 3px;
+  transition: flex-grow 0.2s ease;
+
+  @media only screen and (min-width: $bp-large) {
+    padding: 1rem 2rem;
+  }
+
+  // clear/close btn - hide intially
+  &__clear {
+    display: none;
+  }
+
+  // input field - zero width initially
+  &__input {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: $color-white;
+    font-size: 1.6rem;
+    width: 0;
+
+    &::placeholder {
+      color: rgba($color-white, 0.6);
+    }
+  }
+
+  //search btn
+  &__btn {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+
+    &.hidden {
+      visibility: hidden;
+      opacity: 0;
+
+      @media only screen and (min-width: $bp-large) {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+
+  // when nav__search has active class
+  &.active {
+    flex-grow: 1;
+
+    @media only screen and (min-width: $bp-large) {
+      outline: 1px solid $color-grey;
+    }
+
+    // widen input field
+    & .nav__search__input {
+      width: 100%;
+    }
+
+    // show search list
+    & .nav__search__list {
+      display: initial;
+    }
+
+    // hide search btn
+    & .nav__search__btn {
+      display: none;
+    }
+
+    // show clear btn
+    & .nav__search__clear {
+      display: initial;
+    }
+  }
+
+  // list of search results + use my position btn
+  &__list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: $color-white;
+    border-radius: 3px;
+    box-shadow: $shadow-light;
+    display: none;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: $color-grey $color-dark-grey;
+
+    &::-webkit-scrollbar {
+      width: 0.5rem;
+
+      &-track {
+        background-color: $color-dark-grey;
+      }
+
+      &-thumb {
+        background-color: $color-grey;
+      }
+    }
+  }
+
+  // search result
+  &__item {
+    list-style: none;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1.2;
+
+    &:hover {
+      background-color: rgba($color-grey, 0.5);
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $color-dark-grey;
+    }
+
+    // error message
+    & .message {
+      font-weight: 600;
+      font-size: 1.7rem;
+    }
+
+    & span {
+      font-size: 1.2rem;
+    }
+
+    // use my location btn
+    &.location {
+      font-weight: 500;
+
+      & .fa-location-arrow {
+        color: $color-blue;
+      }
+    }
+
+    // &.highlight {
+    //   background-color: rgba($color-grey, 0.3);
+    // }
+  }
+}

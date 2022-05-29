@@ -1,0 +1,28 @@
+// COLORS
+$color-black: #000000;
+$color-blue: #30475e;
+$color-white: #ffffff;
+$color-dark-grey: #222831;
+$color-grey: #cccccc;
+$color-red: #f05454;
+$color-green: #2e8562;
+
+//SHADOWS
+$shadow-light: 0px 5px 8px 0px rgba(0, 0, 0, 0.24);
+
+//MISC
+$header-height: 6rem;
+$card-max-width: 96rem;
+
+// BREAKPOINTS
+$bp-medium: 37.5em; //600px
+$bp-large: 60em; //960px
+$bp-xlarge: 87.5em; //1400px
+
+// Z-INDEX
+$z-1: 100; // mobile-menu, card
+$z-2: 200; // hamburger-btn, side-scroll arrow;
+$z-3: 300; // search overlay
+$z-4: 400; // search
+$z-5: 500; // modal overlay
+$z-6: 600; // modals

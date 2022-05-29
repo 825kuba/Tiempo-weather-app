@@ -18,6 +18,7 @@ export const state = {
       time: 'h24',
     },
     smoothScroll: false,
+    bgImg: true,
   },
 };
 
@@ -32,10 +33,8 @@ export const getSearchData = async query => {
     if (!response.ok) throw new Error(response.status);
     // return converted response data
     const data = await response.json();
-    // console.log(data);
     return data;
   } catch (err) {
-    // console.error('💥', err.message);
     throw err;
   }
 };
@@ -51,10 +50,8 @@ export const getForecastData = async query => {
     if (!response.ok) throw new Error(`We couldn't find anything :(`);
     // return converted response data
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (err) {
-    // console.error('💥', err);
     throw err;
   }
 };
@@ -74,7 +71,7 @@ export const getUserPosition = () =>
       );
   });
 
-// ADD AND REMOVING CARDS TO/FROM FAVOURITES
+// ADD/REMOVING CARDS TO/FROM FAVOURITES
 export const addOrRemoveCard = clickedCard => {
   // determine whether card is already in favourites
   const isFavourite = state.favourites.some(card => card.id === clickedCard.id);
@@ -95,14 +92,14 @@ export const addOrRemoveCard = clickedCard => {
   return state.favourites.length;
 };
 
-// SAVING FAVOURITES DATA TO LOCAL STORAGE
+// SAVING FAVOURITE PLACES AND SETTINGS TO LOCAL STORAGE
 export const setLocalStorage = () => {
   localStorage.setItem('tiempoFavourites', JSON.stringify(state.favourites));
 
   localStorage.setItem('tiempoSettings', JSON.stringify(state.settings));
 };
 
-// GETTING FAVOURITES DATA FROM LOCAL STORAGE
+// GETTING FAVOURITE PLACES AND SETTINGS FROM LOCAL STORAGE
 export const getLocalStorage = () => {
   const favourites = localStorage.getItem('tiempoFavourites');
   if (favourites && favourites.length)

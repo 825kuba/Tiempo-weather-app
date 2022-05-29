@@ -1,6 +1,6 @@
 'use strict';
 
-import View from './view.js';
+import SpinnerView from './spinnerView.js';
 
 const allCardsBox = document.querySelector('.all-cards');
 const mainBox = document.querySelector('.main-box');
@@ -8,7 +8,7 @@ const leftArrow = document.querySelector('.scroll-arrow--left');
 const rightArrow = document.querySelector('.scroll-arrow--right');
 const indexDots = document.querySelector('.cards-nav__index-dots');
 
-class MainView extends View {
+class MainView extends SpinnerView {
   parentElement = allCardsBox;
   prevScrollIndex = 0;
   scrollIndex = 0;
@@ -72,14 +72,15 @@ class MainView extends View {
       if (this.prevScrollIndex === this.scrollIndex) return;
       // adjust arrows
       this.adjustArrows();
+      // if (!state.settings.bgImg) return;
       // if smooth scroll is on, set background image after timeout (to prevent changing picture X amount of times, i.e. when scrolling over 4 cards, the image would change 4 times)
       if (state.settings.smoothScroll) {
         clearTimeout(this.backgroundTimer);
         this.backgroundTimer = setTimeout(() => {
-          this.setBackground(state.favourites[this.scrollIndex]);
+          this.changeBackground(state.favourites[this.scrollIndex]);
         }, 200);
         // if smooth scroll is off, just change the background without any timer
-      } else this.setBackground(state.favourites[this.scrollIndex]);
+      } else this.changeBackground(state.favourites[this.scrollIndex]);
     });
   }
 
@@ -142,7 +143,9 @@ class MainView extends View {
       indexDots.insertAdjacentHTML(
         'beforeend',
         `
-          <button class="cards-nav__index-dot"></button>
+          <button class="cards-nav__index-dot" aria-label="Favourite place ${
+            i + 1
+          }, button"></button>
         `
       );
     }
@@ -197,7 +200,7 @@ class MainView extends View {
       <div class="card-box">
         <div class="card">
           <div class="card__content">
-            <p class="card__error">${err}</p>
+            <p class="card__error" aria-label="Error message">${err}</p>
           </div>
         </div>
       </div>
@@ -205,25 +208,12 @@ class MainView extends View {
     allCardsBox.insertAdjacentHTML('beforeend', cardMarkup);
   }
 
-  showInfoModal() {
-    infoModal.classList.toggle('active');
-  }
-
   getNumberOfCardsDisplayed() {
     return Array.from(allCardsBox.querySelectorAll('.card-box')).length;
   }
 
-  setSmoothScrollOn() {
-    mainBox.classList.add('smooth-scroll');
-    console.log('smooth scroll on');
-  }
-
-  setSmoothScrollOff() {
-    mainBox.classList.remove('smooth-scroll');
-    console.log('smooth scroll off');
-  }
-
-  setBackground(card) {
+  changeBackground(card) {
+    console.log(card);
     console.log('changing background');
     // get screen size
     const res = window.innerWidth;
@@ -248,6 +238,10 @@ class MainView extends View {
       url(${bgUrl})
     `;
   }
+
+  // resetBackground() {
+  //   document.body.style.backgroundImage = 'none';
+  // }
 }
 
 export default new MainView();

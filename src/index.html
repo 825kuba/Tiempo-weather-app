@@ -10,7 +10,7 @@
     <script type="module" defer src="./js/controller.js"></script>
   </head>
   <body>
-    <header class="nav">
+    <header class="nav" aria-label="header">
       <img
         src="./img/logo-white.png"
         alt="app logo"
@@ -23,25 +23,25 @@
         <button
           type="button"
           class="nav__search__btn"
-          aria-label="submit the search query"
+          aria-label="search, button"
         >
           <i class="fa-solid fa-magnifying-glass"></i>
         </button>
         <button
           type="button"
           class="nav__search__clear"
-          aria-label="clear input field or close the search bar"
+          aria-label="clear input field, close search bar, button"
         >
           <i class="fa-solid fa-xmark"></i>
         </button>
         <input
           type="text"
           placeholder="Start you search"
-          class="nav__search__input"
+          class="nav__search__input" aria-label="Search for a place"
         />
 
-        <ul class="nav__search-list">
-          <li class="nav__search-item location">
+        <ul class="nav__search__list">
+          <li class="nav__search__item location">
             <p><i class="fa-solid fa-location-arrow"></i></p>
             <span>Use my location </span>
           </li>
@@ -60,8 +60,8 @@
         <div class="bar"></div>
       </button>
 
-      <ul class="nav__links">
-        <li class="nav__item nav__item--favourites">
+      <ul class="nav__btns">
+        <li class="nav__btn nav__btn--favourites">
           <a
             href="#"
             class="nav__link"
@@ -69,17 +69,17 @@
             ><i class="fa-regular fa-star"></i
           ></a>
           <span
-            class="nav__item__num-badge"
+            class="nav__btn__num-badge"
             aria-label="number of favourite places"
             >0</span
           >
         </li>
-        <li class="nav__item nav__item--settings">
+        <li class="nav__btn nav__btn--settings">
           <a href="#" class="nav__link" aria-label="open settings"
             ><i class="fa-solid fa-gear"></i
           ></a>
         </li>
-        <li class="nav__item nav__item--info">
+        <li class="nav__btn nav__btn--info">
           <a href="#" class="nav__link" aria-label="open information panel"
             ><i class="fa-solid fa-circle-info"></i
           ></a>
@@ -89,7 +89,7 @@
 
     <div class="overlay overlay--search"></div>
 
-    <nav class="cards-nav">
+    <nav class="cards-nav" aria-label="navigation for favourite places">
       <button class="scroll-arrow scroll-arrow--left" aria-label="scroll left">
         <i class="fa-solid fa-chevron-left"></i>
       </button>
@@ -205,11 +205,93 @@
       <button class="modal__close" aria-label="close information panel">
         &times;
       </button>
-      <img src="./img/logo-black.png" alt="tiempo logo" class="info__logo" />
-      <p>
-        Tiempo weather is a single page application that I built to practice CSS
-        and JavaScript
-      </p>
+      <div class="modal__heading">
+        <img src="./img/logo-black.png" alt="tiempo logo" class="info__logo" />
+      </div>
+      <article class="modal__info">
+        
+          <h3>
+            Tiempo weather is a single page weather app built with SCSS and
+            JavaScript.
+          </h3>
+          <p>
+            Bellow you can find a description of the app's features. For all the
+            technical information and to see the code, please visit the
+            project's
+            <a href="https://github.com/825kuba/Tiempo-weather-app" target="_blank"
+              >GitHub page</a
+            >.
+          </p>
+        <div class="modal__features">
+          <h4>Tiempo allows you to:</h4>
+          <ul>
+            <li class="modal__list-item">
+              <details class="modal__detail">
+                <summary class="modal__detail__sum">
+                  <h5>Search</h5>
+                </summary>
+                <div class="modal__detail__cont">
+                  Search for places and see the results in real time. Select one
+                  of the search results, use your position, or simply press
+                  enter to search for your query.
+                </div>
+              </details>
+            </li>
+            <li class="modal__list-item">
+              <details class="modal__detail">
+                <summary class="modal__detail__sum">
+                  <h5>Switch between forecasts</h5>
+                </summary>
+                <div class="modal__detail__cont">
+                  Switch between hourly and daily forecast on the weather card.
+                </div>
+              </details>
+            </li>
+            <li class="modal__list-item">
+              <details class="modal__detail">
+                <summary class="modal__detail__sum">
+                  <h5>Check the time</h5>
+                </summary>
+                <div class="modal__detail__cont">
+                  See what the local time is - each card has it's own working
+                  clock.
+                </div>
+              </details>
+            </li>
+            <li class="modal__list-item">
+              <details class="modal__detail">
+                <summary class="modal__detail__sum">
+                  <h5>Add to favourites</h5>
+                </summary>
+                <div class="modal__detail__cont">
+                  Add cards to favourites and see how many places you've added -
+                  the number updates in real time. Navigate between your
+                  favourite places using the buttons on screen, keyboard arrows
+                  on desktop or swipe gestures on touch screen.
+                </div>
+              </details>
+            </li>
+            <li class="modal__list-item">
+              <details class="modal__detail">
+                <summary class="modal__detail__sum">
+                  <h5>Change settings</h5>
+                </summary>
+                <div class="modal__detail__cont">
+                  Change time format, weather units and switch smooth scrolling on and
+                  off. Confirm changes by pressing the button, or cancel them by exiting the settings window.
+                </div>
+              </details>
+            </li>
+          </ul>
+        </div>
+        <div class="modal__contact">
+          <a 
+          href="https://github.com/825kubaTiempo-weather-app"
+          target="_blank" aria-label="Projet's GitHub page"
+          ><img src="./icons/GitHub-Mark-32px.png"alt="GitHub logo"
+          />
+        </div>
+      </article>
     </section>
 
     <section class="modal modal--settings">
@@ -222,22 +304,22 @@
         <fieldset class="modal__section">
           <h4 class="modal__section-name">Temperature:</h4>
           <div class="modal__options">
-            <label class="modal__option">
+            <label class="modal__option" aria-label="Celsius" aria-label="set temperature units to degreees celsius">
               <input
                 type="radio"
                 name="temp"
                 value="c"
-                aria-label="set temperature units to degreees celsius"
+                
               />
               <div class="modal__radio"></div>
               °C
             </label>
-            <label class="modal__option">
+            <label class="modal__option" aria-label="set temperature units to degreees fahrenheit">
               <input
                 type="radio"
                 name="temp"
                 value="f"
-                aria-label="set temperature units to degreees fahrenheit"
+                
               />
               <div class="modal__radio"></div>
               °F
@@ -248,22 +330,22 @@
         <fieldset class="modal__section">
           <h4 class="modal__section-name">Wind:</h4>
           <div class="modal__options">
-            <label class="modal__option">
+            <label class="modal__option" aria-label="set wind units to kilometers per hour">
               <input
                 type="radio"
                 name="wind"
                 value="kph"
-                aria-label="set wind units to kilometers per hour"
+                
               />
               <div class="modal__radio"></div>
               kph
             </label>
-            <label class="modal__option">
+            <label class="modal__option" aria-label="set wind units to miles per hour">
               <input
                 type="radio"
                 name="wind"
                 value="mph"
-                aria-label="set wind units to miles per hour"
+                
               />
               <div class="modal__radio"></div>
               mph
@@ -274,22 +356,22 @@
         <fieldset class="modal__section">
           <h4 class="modal__section-name">Rain:</h4>
           <div class="modal__options">
-            <label class="modal__option">
+            <label class="modal__option" aria-label="set rain units to millimeters">
               <input
                 type="radio"
                 name="rain"
                 value="mm"
-                aria-label="set rain units to millimeters"
+                
               />
               <div class="modal__radio"></div>
               mm
             </label>
-            <label class="modal__option">
+            <label class="modal__option" aria-label="set rain units to inches">
               <input
                 type="radio"
                 name="rain"
                 value="in"
-                aria-label="set rain units to inches"
+                
               />
               <div class="modal__radio"></div>
               in
@@ -300,23 +382,23 @@
         <fieldset class="modal__section">
           <h4 class="modal__section-name">Time format:</h4>
           <div class="modal__options">
-            <label class="modal__option">
+            <label class="modal__option" aria-label="set time format to 24 hours">
               <input
                 type="radio"
                 name="time"
                 value="h24"
-                aria-label="set time format to 24 hours"
+                
               />
               <div class="modal__radio"></div>
               24h
             </label>
 
-            <label class="modal__option">
+            <label class="modal__option" aria-label="set time format to 12 hours">
               <input
                 type="radio"
                 name="time"
                 value="h12"
-                aria-label="set time format to 12 hours"
+                
               />
               <div class="modal__radio"></div>
               12h
@@ -326,22 +408,34 @@
 
         <fieldset class="modal__section">
           <h4 class="modal__section-name">Smooth scrolling:</h4>
-          <label class="modal__switch">
+          <label class="modal__switch" aria-label="set smooth scrolling on and off">
             <input
               type="checkbox"
               name="smoothScroll"
               class="modal__switch__btn"
-              aria-label="set smooth scrolling on and off"
+              
             />
             <div class="modal__switch__bg"></div>
           </label>
         </fieldset>
 
+        <!-- <fieldset class="modal__section">
+          <h4 class="modal__section-name">Background images:</h4>
+          <label class="modal__switch">
+            <input
+              type="checkbox"
+              name="bgImg"
+              class="modal__switch__btn"
+              aria-label="set background images on and off"
+            />
+            <div class="modal__switch__bg"></div>
+          </label>
+        </fieldset> -->
+
         <button
           class="modal__submit"
           type="submit"
           disabled
-          aria-label="submit changes to settings"
         >
           Save changes
         </button>

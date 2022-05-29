@@ -1,38 +1,6 @@
 // FONT
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
 
-// COLORS
-$color-black: #000000;
-$color-blue: #30475e;
-$color-white: #ffffff;
-$color-dark-grey: #222831;
-$color-grey: #cccccc;
-$color-red: #f05454;
-$color-green: #2e8562;
-
-//SHADOW
-$shadow-light: 0px 5px 8px 0px rgba(0, 0, 0, 0.24);
-
-//VARIABLES
-$header-height: 6rem;
-$card-max-width: 96rem;
-
-// BREAKPOINTS
-$bp-medium: 37.5em; //600px
-$bp-large: 60em; //960px
-$bp-xlarge: 87.5em; //1400px
-
-// Z-INDEX
-$z-1: 100; // mobile-menu, card
-$z-2: 200; // hamburger-btn, side-scroll arrow;
-$z-3: 300; // search overlay
-$z-4: 400; // search
-$z-5: 500; // modal overlay
-$z-6: 600; // modals
-
-// $bg-img: url('https://source.unsplash.com/random/1024x768/?weather') center
-//   center / cover no-repeat;
-
 *,
 *:before,
 *:after {
@@ -52,15 +20,13 @@ html {
   @media only screen and (min-width: $bp-xlarge) {
     font-size: 75%;
   }
-
-  // @media only screen and (max-width: $bp-medium) {
-  //   background-image: url('https://source.unsplash.com/random/720x576/?weather');
-  // }
 }
 
 body {
   min-height: 100vh;
   box-sizing: border-box;
+  display: grid;
+  grid-template-rows: max-content min-content 1fr;
 
   background-color: $color-dark-grey;
   background-repeat: no-repeat;
@@ -68,28 +34,4 @@ body {
   background-size: cover;
   background-attachment: fixed;
   transition: background-image 0.5s ease;
-
-  // @include random-background(640, 960);
-
-  // @media only screen and (min-width: $bp-medium) {
-  //   @include random-background(1920, 1280);
-  // }
-
-  // @media only screen and (min-width: $bp-xlarge) {
-  //   @include random-background(2400, 1600);
-  // }
-
-  // @include pre-set-background('small');
-
-  // @media only screen and (min-width: $bp-medium) {
-  //   @include pre-set-background('medium');
-  // }
-
-  // @media only screen and (min-width: $bp-xlarge) {
-  //   @include pre-set-background('large');
-  // }
-
-  display: grid;
-  grid-template-rows: max-content min-content 1fr;
-  // row-gap: 2rem;
 }

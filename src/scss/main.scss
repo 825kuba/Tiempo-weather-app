@@ -1,7 +1,9 @@
-@import 'mixins';
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
 @import 'base';
-@import 'header';
-@import 'cardsNav';
-@import 'layout';
-@import 'card';
-@import 'modal';
+@import 'layout/header';
+@import 'layout/allCards';
+@import 'components/searchBar';
+@import 'components/cardsNav';
+@import 'components/card';
+@import 'components/modal';

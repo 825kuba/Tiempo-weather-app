@@ -1,0 +1,43 @@
+@mixin flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin flex-end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+@mixin flex-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-col-start {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@mixin bg-filter($color) {
+  background-color: rgba($color, 0.5);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+
+  // BACKDROP-FILTER FALLBACK
+  @supports not ((backdrop-filter: none) or (-webkit-backdrop-filter: none)) {
+    & {
+      background-color: rgba($color, 0.5);
+    }
+  }
+}

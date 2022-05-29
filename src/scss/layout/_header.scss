@@ -1,0 +1,142 @@
+// the header / navigation panel - contains logo, search bar, and some btns. in case of mobile instead of btns it contains hamburger btn which opens and closes mobile menu
+.nav {
+  position: relative;
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 1rem 2rem;
+
+  @media only screen and (min-width: $bp-large) {
+    gap: 3rem;
+  }
+
+  // general reset for btns
+  & button {
+    background-color: transparent;
+    border: none;
+    color: $color-white;
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+
+  &__logo {
+    cursor: pointer;
+    width: 15rem;
+
+    @media only screen and (min-width: $bp-medium) {
+      width: unset;
+    }
+
+    &.hidden {
+      display: none;
+
+      @media only screen and (min-width: $bp-large) {
+        display: initial;
+      }
+    }
+  }
+
+  // btn that opens and closes mobile menu
+  &__hamburger {
+    position: relative;
+    z-index: $z-2;
+    @include flex-col;
+    gap: 0.4rem;
+
+    & .bar {
+      width: 2rem;
+      height: 2px;
+      background-color: $color-white;
+      transition: transform 0.2s ease;
+    }
+
+    &.active {
+      & .bar:nth-child(1) {
+        position: absolute;
+        transform: rotate(-45deg);
+      }
+      & .bar:nth-child(3) {
+        position: absolute;
+        transform: rotate(45deg);
+      }
+      & .bar:nth-child(2) {
+        visibility: hidden;
+      }
+    }
+
+    @media only screen and (min-width: $bp-large) {
+      display: none;
+    }
+  }
+
+  // on mobile these are displayed using the hamburger menu, on bigger screens they just sit on the nav panel
+  &__btns {
+    position: absolute;
+    top: -100%;
+    right: 0;
+    z-index: $z-1;
+    @include flex;
+    gap: 5rem;
+    width: 100%;
+    height: 100%;
+    background-color: $color-blue;
+    padding: 1rem 2rem;
+    box-shadow: $shadow-light;
+
+    transition: top 0.2s ease;
+
+    &.active {
+      top: 0;
+    }
+
+    @media only screen and (min-width: $bp-large) {
+      position: static;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      background-color: transparent;
+      padding: 0;
+      width: initial;
+      height: initial;
+      box-shadow: none;
+    }
+  }
+
+  // the actual nav btns
+  &__btn {
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+
+    // use to display number of favourite cards
+    &__num-badge {
+      position: absolute;
+      z-index: -10;
+      background-color: $color-blue;
+      color: $color-white;
+      font-weight: 700;
+      font-size: 1.35rem;
+      border-radius: 50%;
+      width: 2.1rem;
+      height: 2.1rem;
+      bottom: 1rem;
+      left: 1rem;
+      @include flex;
+      display: none;
+
+      &.active {
+        display: flex;
+      }
+    }
+  }
+
+  // general reset for links containing btns
+  &__link:link,
+  &__link:visited {
+    text-decoration: none;
+    color: $color-white;
+    font-size: 1.6rem;
+  }
+}

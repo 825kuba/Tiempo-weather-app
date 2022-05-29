@@ -1,9 +1,9 @@
+///////////////////////////////////////////
+// (1) - GENERAL STYLES FOR MODAL WINDOWS
 .modal {
   background-color: $color-white;
   position: fixed;
   z-index: $z-6;
-  width: max-content;
-  max-width: 90vw;
   max-height: 90vh;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -35,6 +35,17 @@
     top: 50%;
   }
 
+  &--settings {
+    width: max-content;
+    max-width: 90vw;
+  }
+
+  &--info {
+    width: 90vw;
+    max-width: 60rem;
+  }
+
+  // close modal btn
   &__close {
     position: absolute;
     right: 1rem;
@@ -46,17 +57,100 @@
     cursor: pointer;
   }
 
+  // heading section
   &__heading {
     text-align: center;
     font-size: 2.5rem;
-    padding: 4rem 2rem;
+    padding: 2rem;
   }
 
+  /////////////////////////////////////////
+  // (2) - INFO MODAL
+
+  &__info {
+    padding: 0 2rem;
+    @include flex-col;
+    align-items: stretch;
+    gap: 4rem;
+
+    & h3 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 600;
+      max-width: 45rem;
+      margin: 0 auto;
+    }
+
+    & h4 {
+      text-align: center;
+      font-size: 1.9rem;
+      font-weight: 600;
+    }
+
+    & a:link,
+    & a:visited {
+      font-weight: 600;
+      color: $color-blue;
+      text-decoration: none;
+    }
+
+    & a:hover,
+    & a:active,
+    & a:focus {
+      text-decoration: underline;
+    }
+  }
+
+  // wrapper of features list + heading
+  &__features {
+    @include flex-col;
+    align-items: stretch;
+    gap: 2rem;
+  }
+
+  &__list-item {
+    list-style: none;
+
+    &:not(:last-of-type) {
+      margin-bottom: 1rem;
+    }
+  }
+
+  // summary of list item
+  &__detail__sum {
+    font-size: 1.8rem;
+    cursor: pointer;
+    background-color: rgba($color-grey, 0.8);
+    padding: 1rem 2rem;
+    border-radius: 3px;
+
+    * {
+      display: inline;
+    }
+
+    &:hover {
+      background-color: rgba($color-grey, 1);
+    }
+  }
+
+  // text content of list item
+  &__detail__cont {
+    padding: 1rem;
+  }
+
+  // bottom contact info
+  &__contact {
+    @include flex;
+  }
+
+  /////////////////////////////////////////
+  // (3) - SETTINGS MODAL
   &__settings {
     @include flex-col;
     align-items: stretch;
   }
 
+  // individual line of settings
   &__section {
     position: relative;
     border: none;
@@ -81,12 +175,14 @@
     }
   }
 
+  // two options for a setting
   &__options {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
   }
 
+  // each actual option
   &__option {
     justify-self: start;
     @include flex;
@@ -98,8 +194,7 @@
     }
   }
 
-  // CUSTOM RADIO BUTTONS
-
+  // hide initial radio buttons
   &__option {
     & input[type='radio'] {
       appearance: none;
@@ -110,12 +205,14 @@
         }
       }
 
+      // show the custom radio when checked
       &:checked ~ .modal__radio::after {
         transform: scale(1);
       }
     }
   }
 
+  // custom radio
   &__radio {
     width: 1.5rem;
     height: 1.5rem;
@@ -134,7 +231,7 @@
     }
   }
 
-  // SWITCHING BUTTON
+  // switch button
   &__switch {
     align-self: center;
     position: relative;
@@ -142,6 +239,7 @@
     height: 2.5rem;
     cursor: pointer;
 
+    // then sliding area
     &__bg {
       position: absolute;
       top: 0;
@@ -152,6 +250,7 @@
       background-color: $color-grey;
       transition: background-color 0.15s ease-in-out;
 
+      // the slider - round btn
       &::after {
         position: absolute;
         content: '';
@@ -166,6 +265,7 @@
       }
     }
 
+    // hide the initial checkbox
     & input {
       appearance: none;
 
@@ -175,6 +275,7 @@
         }
       }
 
+      // chnge styles of custom element when checked
       &:checked {
         & ~ .modal__switch__bg {
           background-color: $color-green;
@@ -187,6 +288,7 @@
     }
   }
 
+  // submit btn
   &__submit {
     align-self: center;
     margin-top: 2rem;

@@ -3,17 +3,17 @@
 import modalView from './modalView.js';
 
 // SELECT ELEMENTS
-const navLinks = document.querySelector('.nav__links');
+const navLinks = document.querySelector('.nav__btns');
 const hamburger = document.querySelector('.nav__hamburger');
 const searchBtn = document.querySelector('.nav__search__btn');
 const logo = document.querySelector('.nav__logo');
-const favouritesBtn = document.querySelector('.nav__item--favourites');
+const favouritesBtn = document.querySelector('.nav__btn--favourites');
 const favouritesBtnLink = favouritesBtn.querySelector('.nav__link');
-const numBadge = document.querySelector('.nav__item__num-badge');
-const infoBtn = document.querySelector('.nav__item--info');
-const settingsBtn = document.querySelector('.nav__item--settings');
+const numBadge = document.querySelector('.nav__btn__num-badge');
+const infoBtn = document.querySelector('.nav__btn--info');
+const settingsBtn = document.querySelector('.nav__btn--settings');
 
-class navView {
+class HeaderView {
   //  OPEN AND CLOSE MOBILE MENU
   toggleMobileMenu() {
     navLinks.classList.toggle('active');
@@ -26,7 +26,7 @@ class navView {
     // hamburger button
     hamburger.addEventListener('click', this.toggleMobileMenu);
     // all mobile menu buttons
-    Array.from(document.querySelectorAll('.nav__item')).map(item =>
+    Array.from(document.querySelectorAll('.nav__btn')).map(item =>
       item.addEventListener('click', this.toggleMobileMenu)
     );
   }
@@ -72,15 +72,15 @@ class navView {
 
   addHandlerInfoBtn() {
     infoBtn.addEventListener('click', () => {
-      modalView.showInfoModal();
+      modalView.showModal('info');
     });
   }
 
   addHandlerSettingsBtn() {
     settingsBtn.addEventListener('click', () => {
-      modalView.showSettingsModal();
+      modalView.showModal('settings');
     });
   }
 }
 
-export default new navView();
+export default new HeaderView();

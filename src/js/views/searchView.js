@@ -1,6 +1,6 @@
 'use strict';
 
-import View from './view.js';
+import Spinner from './spinnerView.js';
 
 // SELECT ELEMENTS
 const logo = document.querySelector('.nav__logo');
@@ -9,10 +9,10 @@ const searchOverlay = document.querySelector('.overlay--search');
 const searchBarInput = document.querySelector('.nav__search input');
 const searchBtn = document.querySelector('.nav__search__btn');
 const clearBtn = document.querySelector('.nav__search__clear');
-const searchList = document.querySelector('.nav__search-list');
+const searchList = document.querySelector('.nav__search__list');
 const searchResults = document.querySelector('.nav__search__results');
 
-class SearchView extends View {
+class SearchView extends Spinner {
   parentElement = searchResults;
 
   // OPEN OR CLOSE SEARCH BAR
@@ -101,8 +101,8 @@ class SearchView extends View {
     // if array is empty, render message
     if (!array.length) {
       const markup = `
-        <li class="nav__search-item">
-          <p class="message">We couldn't find anything :(</p>
+        <li class="nav__search__item">
+          <p class="message" aria-label="Error message">We couldn't find anything :(</p>
         </li>
       `;
       searchResults.insertAdjacentHTML('beforeend', markup);
@@ -110,7 +110,7 @@ class SearchView extends View {
     // for every item in array insert HTML markup
     array.map(item => {
       const markup = `
-        <li class="nav__search-item">
+        <li class="nav__search__item">
           <p>${item.name}</p>
           <span>${item.region ? `${item.region}, ` : ''}${item.country}</span>
         </li>
@@ -134,7 +134,7 @@ class SearchView extends View {
   addHandlerSearchResult(handler) {
     searchResults.addEventListener('click', e => {
       // get the clicked search-item element
-      const target = e.target.closest('.nav__search-item');
+      const target = e.target.closest('.nav__search__item');
       if (!target) return;
       //get city name
       const city = target.querySelector('p').innerHTML;

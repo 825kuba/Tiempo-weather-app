@@ -1,3 +1,4 @@
+// weather card
 .card {
   width: 100%;
   min-height: 100%;
@@ -11,6 +12,7 @@
   color: $color-white;
   font-size: 1.6rem;
 
+  // bar at the top containing time and favourite btn
   &__toolbar {
     display: flex;
     align-items: center;
@@ -19,6 +21,7 @@
     padding: 0.5rem 1rem;
   }
 
+  // favourite btn
   &__favourite {
     color: $color-white;
     font-size: 2rem;
@@ -34,6 +37,7 @@
     }
   }
 
+  // clock
   &__time-date {
     & .card__time {
       letter-spacing: 0.1rem;
@@ -41,24 +45,17 @@
     font-size: 1.5rem;
   }
 
+  // main part of weather card containing all the weather data
   &__content {
     display: flex;
     flex-direction: column;
     gap: 3rem;
     padding: 2rem 1rem 1rem 1rem;
 
-    background-color: rgba($color-blue, 0.5);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-
-    // BACKDROP-FILTER FALLBACK
-    @supports not ((backdrop-filter: none) or (-webkit-backdrop-filter: none)) {
-      & {
-        background-color: rgba($color-blue, 0.8);
-      }
-    }
+    @include bg-filter($color-blue);
   }
 
+  // top part of content, contains current weather
   &__current {
     display: grid;
 
@@ -80,18 +77,43 @@
     }
   }
 
+  // the place's name, contains city, region, country
   &__name {
-    @include flex-col-start;
+    @include flex-col;
+    text-align: center;
     line-height: 1.2;
     grid-row: 1 / 2;
     gap: 1rem;
 
     @media only screen and (min-width: $bp-medium) {
+      @include flex-col-start;
+      text-align: left;
       grid-column: 2 / 3;
       grid-row: 1 / 6;
     }
   }
 
+  &__city {
+    font-size: 3rem;
+    font-size: 400;
+
+    @media only screen and (min-width: $bp-medium) {
+      font-size: 4rem;
+      font-weight: 300;
+    }
+  }
+
+  &__country,
+  &__region {
+    font-size: 1.8rem;
+    // display: none;
+
+    // @media only screen and (min-width: $bp-medium) {
+    //   display: initial;
+    // }
+  }
+
+  // contains temperature and icon
   &__conditions {
     @include flex;
     gap: 1rem;
@@ -109,12 +131,19 @@
     }
   }
 
+  &__temp {
+    font-size: 4.5rem;
+    font-weight: 300;
+  }
+
+  // description of current conditions
   &__descr {
     font-size: 2.2rem;
     text-align: center;
     grid-row: 4 / 5;
 
     @media only screen and (min-width: $bp-medium) {
+      font-size: 2.5rem;
       grid-column: 4 / 5;
       grid-row: 3 / 4;
     }
@@ -125,9 +154,10 @@
     }
   }
 
+  // contains aditional data about weather, sunset and sunrise times
   &__details {
     @include flex-col;
-    gap: 2rem;
+    gap: 1rem;
     grid-row: 5 / 6;
 
     @media only screen and (min-width: $bp-medium) {
@@ -136,6 +166,7 @@
     }
 
     @media only screen and (min-width: $bp-large) {
+      gap: 2rem;
       grid-column: 4 / 5;
       grid-row: 1 / 6;
 
@@ -149,44 +180,22 @@
     }
 
     &--sun {
-      display: none;
       width: max-content;
-      @media only screen and (min-width: $bp-large) {
-        display: flex;
-      }
+      // display: none;
+      // @media only screen and (min-width: $bp-large) {
+      //   display: flex;
+      // }
     }
   }
 
-  &__temp {
-    font-size: 4.5rem;
-    font-weight: 300;
+  // contains daily and hourly forecast data and buttons to switch between them
+  &__all-forecasts {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
   }
 
-  &__city {
-    font-size: 3rem;
-    font-size: 400;
-
-    @media only screen and (min-width: $bp-medium) {
-      font-size: 4rem;
-      font-weight: 300;
-    }
-
-    // @media only screen and (min-width: $bp-large) {
-    //   font-size: 4.5rem;
-    //   font-weight: 300;
-    // }
-  }
-
-  &__country,
-  &__region {
-    font-size: 1.8rem;
-    display: none;
-
-    @media only screen and (min-width: $bp-medium) {
-      display: initial;
-    }
-  }
-
+  // btn to switch between forecasts
   &__controlls {
     display: flex;
     gap: 1rem;
@@ -214,12 +223,7 @@
     }
   }
 
-  &__all-forecasts {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
+  // eiher daily or hourly
   &__forecast {
     @include flex-start;
     gap: 2rem;
@@ -227,7 +231,6 @@
     overflow: auto;
     scrollbar-width: thin;
     scrollbar-color: $color-grey $color-dark-grey;
-    // scroll-behavior: smooth;
 
     &::-webkit-scrollbar {
       height: 0.4rem;
@@ -241,6 +244,7 @@
       }
     }
 
+    // the actual hour or day data, contains name(day name or time of day), icon and temperature
     &__item {
       @include flex-col;
       gap: 0.5rem;
@@ -267,6 +271,7 @@
     }
   }
 
+  // message box that shows errors
   &__error {
     font-size: 2.5rem;
     margin: 1rem auto 2rem auto;

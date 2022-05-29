@@ -1,6 +1,6 @@
+// navigation for favourite cards - index dots and arrows
 .cards-nav {
   @include flex;
-  justify-content: space-evenly;
   position: relative;
 
   &__index-dots {
@@ -10,21 +10,10 @@
     gap: 1rem;
     display: none;
     padding: 0;
-    // border-radius: 500rem;
-    // background-color: rgba($color-blue, 0.3);
-    // backdrop-filter: blur(5px);
-    // -webkit-backdrop-filter: blur(5px);
-
-    // // BACKDROP-FILTER FALLBACK
-    // @supports not ((backdrop-filter: none) or (-webkit-backdrop-filter: none)) {
-    //   & {
-    //     background-color: rgba($color-blue, 0.6);
-    //   }
-    // }
 
     &.active {
       display: flex;
-      padding: 1rem 2rem;
+      padding: 1rem 0;
     }
   }
 
@@ -43,12 +32,10 @@
   }
 }
 
-// SIDE SCROLLING ARROWS
-
+// side scrolling arrows
 .scroll-arrow {
   color: $color-white;
-  --size: 2.5rem;
-  font-size: var(--size);
+  font-size: 2.5rem;
   opacity: 0.5;
   position: fixed;
   z-index: $z-2;
@@ -56,25 +43,10 @@
   transform: translateY(-50%);
   background-color: transparent;
   border: none;
-  // border-radius: 50%;
-  // width: 5rem;
-  // height: 5rem;
-  // padding: 0.5rem;
   cursor: pointer;
   display: none;
   visibility: visible;
   transition: opacity 0.2s ease;
-
-  // background-color: rgba($color-blue, 0.3);
-  // backdrop-filter: blur(5px);
-  // -webkit-backdrop-filter: blur(5px);
-
-  // // BACKDROP-FILTER FALLBACK
-  // @supports not ((backdrop-filter: none) or (-webkit-backdrop-filter: none)) {
-  //   & {
-  //     background-color: rgba($color-blue, 0.6);
-  //   }
-  // }
 
   &--left {
     left: 3rem;
@@ -83,23 +55,23 @@
     right: 3rem;
   }
 
+  // used when arrows are needed - when favourite cards are displayed
   &.active {
     display: initial;
   }
 
+  // used when one of the arrows is not needed - when scrolling begins or ends
   &.hidden {
     visibility: hidden;
     opacity: 0;
   }
 
   @media only screen and (min-width: $bp-medium) {
-    // font-size: 3rem;
-    --size: 3rem;
+    font-size: 3rem;
   }
 
   @media only screen and (min-width: $bp-large) {
     opacity: 1;
-    // font-size: 3.5rem;
-    --size: 3.5rem;
+    font-size: 3.5rem;
   }
 }

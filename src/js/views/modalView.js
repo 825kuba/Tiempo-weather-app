@@ -11,42 +11,48 @@ const closeBtns = document.querySelectorAll('.modal__close');
 const mainBox = document.querySelector('.main-box');
 
 class ModalView {
-  showInfoModal() {
+  // show modal woth given class name
+  showModal(name) {
+    // show overlay
     modalOverlay.classList.add('active');
-    infoModal.classList.add('active');
+    // show modal
+    document.querySelector(`.modal--${name}`).classList.add('active');
+    // prevent scrolling in main container
     document.body.style.overflow = 'hidden';
   }
 
-  hideInfoModal() {
+  // hide modal woth given class name
+  hideModal(name) {
+    // hide overlay
     modalOverlay.classList.remove('active');
-    infoModal.classList.remove('active');
-    document.body.style.overflow = 'initial';
-  }
-
-  showSettingsModal() {
-    modalOverlay.classList.add('active');
-    settingsModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
-  hideSettingsModal() {
-    modalOverlay.classList.remove('active');
-    settingsModal.classList.remove('active');
+    // hide modal
+    document.querySelector(`.modal--${name}`).classList.remove('active');
+    // allow scrolling in main container
     document.body.style.overflow = 'initial';
   }
 
   addHandlerModalOverlay(handler) {
     modalOverlay.addEventListener('click', () => {
-      this.hideInfoModal();
-      this.hideSettingsModal();
+      this.hideModal('info');
+      this.hideModal('settings');
       handler();
     });
+  }
+
+  setSmoothScrollOn() {
+    mainBox.classList.add('smooth-scroll');
+    console.log('smooth scroll on');
+  }
+
+  setSmoothScrollOff() {
+    mainBox.classList.remove('smooth-scroll');
+    console.log('smooth scroll off');
   }
 
   // INITIAL SETTINGS ON LOAD
   initSettings(settings) {
     console.log(settings);
-    // loop through the value of unit settings
+    // loop through the values of unit settings
     Object.values(settings.units).forEach(value => {
       // for each value select the radio input with the same value and set it as checked
       document
@@ -60,15 +66,29 @@ class ModalView {
       document
         .querySelector('.modal__settings')
         .querySelector(`input[name=smoothScroll]`).checked = true;
-      mainView.setSmoothScrollOn();
+      this.setSmoothScrollOn();
     }
     // otherwise set as not checked
     else {
       document
         .querySelector('.modal__settings')
         .querySelector(`input[name=smoothScroll]`).checked = false;
-      mainView.setSmoothScrollOff();
+      this.setSmoothScrollOff();
     }
+    // // check value of bgImg in settings
+    // // if true, set the check input as checked
+    // if (settings.bgImg) {
+    //   document
+    //     .querySelector('.modal__settings')
+    //     .querySelector(`input[name=bgImg]`).checked = true;
+    // }
+    // // otherwise set as not checked
+    // else {
+    //   document
+    //     .querySelector('.modal__settings')
+    //     .querySelector(`input[name=bgImg]`).checked = false;
+    //   mainView.resetBackground();
+    // }
     // disable save changes btn
     settingsFormSubmitBtn.disabled = true;
   }
@@ -109,15 +129,15 @@ class ModalView {
       // // disable submit button again
       // settingsFormSubmitBtn.disabled = true;
       // hide settings modal window again
-      this.hideSettingsModal();
+      this.hideModal('settings');
     });
   }
 
   addHandlerCLoseBtn(handler) {
     closeBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        this.hideInfoModal();
-        this.hideSettingsModal();
+        this.hideModal('info');
+        this.hideModal('settings');
         handler();
       });
     });
@@ -130,8 +150,8 @@ class ModalView {
           infoModal.classList.contains('active') ||
           settingsModal.classList.contains('active')
         ) {
-          this.hideInfoModal();
-          this.hideSettingsModal();
+          this.hideModal('info');
+          this.hideModal('settings');
           handler();
         }
     });

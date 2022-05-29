@@ -1,5 +1,5 @@
 import * as model from './model.js';
-import navView from './views/navView.js';
+import headerView from './views/headerView.js';
 import searchView from './views/searchView.js';
 import { CardView } from './views/cardView.js';
 import mainView from './views/mainView.js';
@@ -31,6 +31,7 @@ async function controlSearchResults(query) {
 async function controlForecastForMainCard(query) {
   // get data from api
   const data = await model.getForecastData(query);
+  console.log(data);
   //check for already existing card in favourites array
   const isFavourite = model.state.favourites.some(
     card =>
@@ -72,7 +73,8 @@ async function controlForecastByQuery(query) {
     mainView.renderSpinner();
 
     await controlForecastForMainCard(query);
-    mainView.setBackground(model.state.mainCard);
+    // if (!model.state.settings.bgImg) return;
+    mainView.changeBackground(model.state.mainCard);
   } catch (err) {
     // error handling
     mainView.clearView();
@@ -98,7 +100,9 @@ async function controlForecastByPosition() {
     const query = `${position.coords.latitude},${position.coords.longitude}`;
     // run function with the string as argument
     await controlForecastForMainCard(query);
-    mainView.setBackground(model.state.mainCard);
+    // if (!model.state.settings.bgImg) return;
+
+    mainView.changeBackground(model.state.mainCard);
   } catch (err) {
     // if getUserPosition function returned rejected promise, then clear view and display error based on the error object's code
     mainView.clearView();
@@ -157,7 +161,9 @@ async function controlForecastForFavourites() {
       card.cardInit(model.addOrRemoveCard);
     });
     mainView.initSideScroll(model.state.favourites.length);
-    mainView.setBackground(model.state.favourites[0]);
+    // if (!model.state.settings.bgImg) return;
+
+    mainView.changeBackground(model.state.favourites[0]);
   } catch (err) {
     // error handling
     mainView.clearView();
@@ -201,6 +207,9 @@ function controlSettings(newSettings) {
     });
     // reset the scrolling
     mainView.initSideScroll(model.state.favourites.length);
+    // if (!model.state.settings.bgImg) return;
+
+    mainView.changeBackground(model.state.favourites[0]);
   }
 }
 
@@ -210,12 +219,12 @@ function controlResetSettings() {
 
 function init() {
   model.getLocalStorage();
-  navView.addHandlerMobileMenu();
-  navView.addHandlerLogo();
-  navView.addHandlerFavouritesBtn(controlForecastForFavourites);
-  navView.displayNumOfFavourites(model.state.favourites.length);
-  navView.addHandlerInfoBtn();
-  navView.addHandlerSettingsBtn();
+  headerView.addHandlerMobileMenu();
+  headerView.addHandlerLogo();
+  headerView.addHandlerFavouritesBtn(controlForecastForFavourites);
+  headerView.displayNumOfFavourites(model.state.favourites.length);
+  headerView.addHandlerInfoBtn();
+  headerView.addHandlerSettingsBtn();
   modalView.initSettings(model.state.settings);
   modalView.addHandlerSettings(controlSettings);
   modalView.addHandlerModalOverlay(controlResetSettings);
@@ -228,12 +237,6 @@ function init() {
   // controlForecastByPosition();
   searchView.addHandlerLocationBtn(controlForecastByPosition);
   mainView.addHandlersSideScrolling(model.state);
-  // const url = require('../img/bg/small/night/clear.jpg');
-  // document.body.style.backgroundImage = `url(${url})`;
-
-  // window.addEventListener('resize', () => {
-  //   console.log(window.innerWidth);
-  // });
 }
 
 init();
