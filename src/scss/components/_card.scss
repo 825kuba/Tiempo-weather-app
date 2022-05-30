@@ -106,11 +106,6 @@
   &__country,
   &__region {
     font-size: 1.8rem;
-    // display: none;
-
-    // @media only screen and (min-width: $bp-medium) {
-    //   display: initial;
-    // }
   }
 
   // contains temperature and icon
@@ -181,10 +176,6 @@
 
     &--sun {
       width: max-content;
-      // display: none;
-      // @media only screen and (min-width: $bp-large) {
-      //   display: flex;
-      // }
     }
   }
 

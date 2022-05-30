@@ -5,7 +5,6 @@ import { CardView } from './views/cardView.js';
 import mainView from './views/mainView.js';
 import * as helpers from './helpers.js';
 import modalView from './views/modalView.js';
-// import bg from '../img/bg/medium/day/clear.jpg'
 
 // CONTROL DYNAMIC DISPLAYING OF SEARCH RESULTS IN SEARH LIST
 async function controlSearchResults(query) {
@@ -24,14 +23,15 @@ async function controlSearchResults(query) {
     // render search results
     searchView.renderSearchResults(model.state.search.results);
   } catch (err) {
-    console.error('💥', err.message);
+    console.error(err.message);
+    mainView.renderError(err.message);
   }
 }
 
+// CONTROL RENDERING MAIN CARD
 async function controlForecastForMainCard(query) {
   // get data from api
   const data = await model.getForecastData(query);
-  console.log(data);
   //check for already existing card in favourites array
   const isFavourite = model.state.favourites.some(
     card =>
@@ -44,11 +44,7 @@ async function controlForecastForMainCard(query) {
   );
   // save data to state object
   model.state.mainCard = new CardView(
-    data.location.name,
-    data.location.region,
-    data.location.country,
-    data.location.localtime,
-    data.current.is_day,
+    data.location,
     data.current,
     data.forecast,
     isFavourite,
@@ -71,14 +67,14 @@ async function controlForecastByQuery(query) {
     mainView.clearView();
     // show spinner
     mainView.renderSpinner();
-
+    // get forecast data and render card
     await controlForecastForMainCard(query);
-    // if (!model.state.settings.bgImg) return;
+    // change background img
     mainView.changeBackground(model.state.mainCard);
   } catch (err) {
     // error handling
     mainView.clearView();
-    // console.error(err);
+    console.error(err);
     mainView.renderError(err.message);
   }
 }
@@ -98,26 +94,35 @@ async function controlForecastByPosition() {
     const position = await model.getUserPosition();
     // save them in string
     const query = `${position.coords.latitude},${position.coords.longitude}`;
-    // run function with the string as argument
+    // get forecast data and render card
     await controlForecastForMainCard(query);
-    // if (!model.state.settings.bgImg) return;
-
+    // change background img
     mainView.changeBackground(model.state.mainCard);
   } catch (err) {
     // if getUserPosition function returned rejected promise, then clear view and display error based on the error object's code
     mainView.clearView();
-    if (err.code === 1) mainView.renderError('Geolocation denied :(');
-    if (err.code === 2) mainView.renderError('Geolocation request failed :(');
-    if (err.code === 3)
+    if (err.code === 1) {
+      console.error(err.message);
+      mainView.renderError('Geolocation denied :(');
+    }
+    if (err.code === 2) {
+      console.error(err.message);
+      mainView.renderError('Geolocation request failed :(');
+    }
+    if (err.code === 3) {
+      console.error(err.message);
       mainView.renderError('Geolocation request timed out :(');
-    else mainView.renderError(err.message);
+    } else {
+      console.error(err.message);
+      mainView.renderError(err.message);
+    }
   }
 }
 
 // CONTROL GETTING FORECAST DATA FOR ALL FAVOURITE CARDS
 async function controlForecastForFavourites() {
   try {
-    // if there is no favourite card, return
+    // if there is no favourite cards, return
     if (!model.state.favourites.length) return;
     // clear search input field and results list
     searchView.clearSearch();
@@ -131,22 +136,20 @@ async function controlForecastForFavourites() {
     const promises = [];
     model.state.favourites.forEach(card =>
       promises.push(
-        model.getForecastData(`${card.city} ${card.region} ${card.country}`)
+        model.getForecastData(
+          `${card.location.name} ${card.location.region} ${card.location.country}`
+        )
       )
     );
     // fetch all data from that array
     const updatatedFavs = await Promise.all(promises);
     // clear old favourites array
     model.state.favourites.splice(0);
-    // create new favourite card for each API response and push it to favourites array to keep it updated
+    // create new favourite card for each API response and push it to favourites array to update it
     updatatedFavs.forEach(data => {
       const isFavourite = true;
       const card = new CardView(
-        data.location.name,
-        data.location.region,
-        data.location.country,
-        data.location.localtime,
-        data.current.is_day,
+        data.location,
         data.current,
         data.forecast,
         isFavourite,
@@ -160,13 +163,14 @@ async function controlForecastForFavourites() {
     model.state.favourites.forEach(card => {
       card.cardInit(model.addOrRemoveCard);
     });
+    // allow side scrolling
     mainView.initSideScroll(model.state.favourites.length);
-    // if (!model.state.settings.bgImg) return;
-
+    // change background img
     mainView.changeBackground(model.state.favourites[0]);
   } catch (err) {
     // error handling
     mainView.clearView();
+    console.error(err.message);
     mainView.renderError(err.message);
   }
 }
@@ -174,13 +178,8 @@ async function controlForecastForFavourites() {
 function controlSettings(newSettings) {
   // update state object
   model.state.settings = newSettings;
-  // console.log(model.state.settings);
   // save state object to local storage
   model.setLocalStorage();
-  // set smooth scroll
-  // if (model.state.settings.smoothScroll) mainView.setSmoothScrollOn();
-  // else mainView.setSmoothScrollOff();
-  modalView.initSettings(model.state.settings);
   // get number of cards being displayed
   const numOfCards = mainView.getNumberOfCardsDisplayed();
   // if there are no cards displayed, no action is needed
@@ -207,8 +206,7 @@ function controlSettings(newSettings) {
     });
     // reset the scrolling
     mainView.initSideScroll(model.state.favourites.length);
-    // if (!model.state.settings.bgImg) return;
-
+    // change background img
     mainView.changeBackground(model.state.favourites[0]);
   }
 }

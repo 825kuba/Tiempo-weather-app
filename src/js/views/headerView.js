@@ -23,9 +23,9 @@ class HeaderView {
 
   // ADD EVENT LISTENERS
   addHandlerMobileMenu() {
-    // hamburger button
+    // open mobile menu with hamburger button
     hamburger.addEventListener('click', this.toggleMobileMenu);
-    // all mobile menu buttons
+    // close mobile menu with all menu buttons
     Array.from(document.querySelectorAll('.nav__btn')).map(item =>
       item.addEventListener('click', this.toggleMobileMenu)
     );
@@ -55,7 +55,7 @@ class HeaderView {
       {
         // chage favourites icon to filled version
         favouritesBtnLink.innerHTML = '<i class="fa-solid fa-star"></i>';
-        // display current num of favs
+        // update number in badge
         numBadge.textContent = num;
         // give the num badge active class
         numBadge.classList.add('active');

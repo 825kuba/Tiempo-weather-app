@@ -15,11 +15,9 @@ class MainView extends SpinnerView {
   maxScrollIndex = 0;
   index = 0;
   backgroundTimer;
-  ////////////// SIDE SCROLLIING ARROWS //////////////
-  ///////////////////////////////////////////////
 
   // side scrolling function
-  // parameter is 1 or -1
+  // argument is 1 or -1
   sideScroll(value) {
     // get width of card-box element and times it with argument - this will give us the scroll direction and also how much should the scroll be
     const scrollWidth = mainBox.querySelector('.card-box').scrollWidth;
@@ -68,11 +66,9 @@ class MainView extends SpinnerView {
       // calculate new current scroll index
       this.scrollIndex = Math.round(scrollPosition / cardBoxWidth);
       // only after current index is different from previous index, do the rest of stuff
-      console.log('index', this.scrollIndex);
       if (this.prevScrollIndex === this.scrollIndex) return;
       // adjust arrows
       this.adjustArrows();
-      // if (!state.settings.bgImg) return;
       // if smooth scroll is on, set background image after timeout (to prevent changing picture X amount of times, i.e. when scrolling over 4 cards, the image would change 4 times)
       if (state.settings.smoothScroll) {
         clearTimeout(this.backgroundTimer);
@@ -162,10 +158,8 @@ class MainView extends SpinnerView {
     const clickedIndex = Array.from(
       document.querySelectorAll('.cards-nav__index-dot')
     ).indexOf(target);
-    console.log('clicked', clickedIndex);
     // calculate the scroll value: the current scrollIndex minus the clickedIndex to get the value of how much we need to scroll, and times it with -1 to get the correct scroll direction
     const scrollValue = (this.scrollIndex - clickedIndex) * -1;
-    console.log('scroll by:', scrollValue);
     // scroll the mainBox element
     this.sideScroll(scrollValue);
   }
@@ -213,8 +207,6 @@ class MainView extends SpinnerView {
   }
 
   changeBackground(card) {
-    console.log(card);
-    console.log('changing background');
     // get screen size
     const res = window.innerWidth;
     let size;
@@ -222,13 +214,10 @@ class MainView extends SpinnerView {
     if (res > 600 && res <= 1400) size = 'medium';
     if (res > 1400) size = 'large';
     // find out if it's day or night
-    const isDay = card.isDay ? 'day' : 'night';
+    const isDay = card.current.is_day ? 'day' : 'night';
     // get image name based on weather code
-
     const bgUrl = `../../img/bg/${size}/${isDay}/${card.backgroundCode}.jpg`;
-
-    // const cardBox = document.getElementById(card.id);
-
+    // set background img
     document.body.style.backgroundImage = `
       linear-gradient(
         0deg,
@@ -238,10 +227,6 @@ class MainView extends SpinnerView {
       url(${bgUrl})
     `;
   }
-
-  // resetBackground() {
-  //   document.body.style.backgroundImage = 'none';
-  // }
 }
 
 export default new MainView();

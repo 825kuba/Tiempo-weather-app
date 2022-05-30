@@ -7,61 +7,46 @@ import headerView from './headerView.js';
 const allCardsBox = document.querySelector('.all-cards');
 
 export class CardView {
-  constructor(
-    city,
-    region,
-    country,
-    localTime,
-    isDay,
-    current,
-    forecast,
-    isFavourite,
-    settings
-  ) {
-    // MAIN VARIABLES FOR CARD
-    this.city = city;
-    this.region = region ? region : '';
-    this.country = country;
-    // change time string - some browsers(safari) don't support yyyy-mm-dd
-    this.localTime = localTime.replaceAll('-', '/');
-    this.isDay = isDay;
+  constructor(location, current, forecast, isFavourite, settings) {
+    this.location = location;
     this.current = current;
     this.forecast = forecast;
     this.isFavourite = isFavourite;
     this.settings = settings;
 
     // UNIQUE ID
-    this.id = helpers.generateId(this.city, this.region, this.country);
+    this.id = helpers.generateId(
+      this.location.name,
+      this.location.region,
+      this.location.country
+    );
 
     // TIME VARIABLES
-    this.time = new Date(this.localTime);
+    this.time = new Date(this.location.localtime.replaceAll('-', '/')); // safari doesn't support yyyy-mm-dd
     this.timeHours = this.time.getHours();
     this.timeMinutes = this.time.getMinutes();
-    // this.timeHours = 11;
-    // this.timeMinutes = 50;
     this.timeSeconds = new Date().getSeconds(); // use client's time for getting seconds since API always returns time with seconds set to 0
-    // this.timeSeconds = 58;
     this.colon = ':';
     this.timeDayIndex = this.time.getDay();
     this.timeDay = helpers.daysOfWeek(this.timeDayIndex);
     this.timeDayFull = helpers.daysOfWeek(this.timeDayIndex, 'full');
 
+    // CODE FOR SETTINGD BACKGROUND IMAGE
     this.backgroundCode;
   }
 
+  // CHANGE CARD'S SETTINGS FOR TEMPERATURE, WIND AND RAIN UNITS, AND TIME FORMAT (12H/24H)
   updateSettings() {
     this.temp = this.settings.temp === 'c' ? 'temp_c' : 'temp_f';
     this.wind = this.settings.wind === 'kph' ? 'wind_kph' : 'wind_mph';
     this.rain = this.settings.rain === 'mm' ? 'precip_mm' : 'precip_in';
-    // this.displayHours =
-    //   this.settings.time === 'h24' ? this.timeHours : this.timeHours % 12;
+    // set AM/PM indicator
     if (this.settings.time === 'h24') this.amPm = '';
     else this.amPm = this.timeHours < 12 ? ' AM' : ' PM';
-    // sunrise / sunset time format
-    // API only return 12h format of sunset / sunrise, so we have to create our own version of 24h format
 
+    // SET SUNRISE TIME FORMAT
     // get 24h format
-    this.sunriseShort = this.getSun24format(
+    this.sunriseShort = helpers.getSun24format(
       this.forecast.forecastday[0].astro.sunrise
     );
     // settings for 12h format ? use original string, else use the 24h format we created
@@ -70,8 +55,9 @@ export class CardView {
         ? this.forecast.forecastday[0].astro.sunrise
         : this.sunriseShort;
 
+    // SET SUNSET TIME FORMAT
     // get 24h format
-    this.sunsetShort = this.getSun24format(
+    this.sunsetShort = helpers.getSun24format(
       this.forecast.forecastday[0].astro.sunset
     );
     // settings for 12h format ? use original string, else use the 24h format we created
@@ -79,19 +65,6 @@ export class CardView {
       this.settings.time === 'h12'
         ? this.forecast.forecastday[0].astro.sunset
         : this.sunsetShort;
-  }
-
-  getSun24format(str) {
-    // get AM/PM string
-    const amPm = str.slice(-3).slice(1).toUpperCase();
-    // get hours number out of string
-    const hours = +str.slice(0, 2);
-    // add 12 to hours if it's PM
-    const formatedHours = amPm === 'PM' ? hours + 12 : hours;
-    // delete AM/PM and hours from string
-    const formatedStr = str.slice(0, -3).slice(2);
-    // return final string
-    return `${formatedHours < 10 ? '0' : ''}${formatedHours}${formatedStr}`;
   }
 
   // RENDER WEATHER CARD
@@ -121,10 +94,12 @@ export class CardView {
         <div class="card__content"> 
           <div class="card__current">
             <div class="card__name">
-              <p class="card__city" aria-label="City name">${this.city}</p>
+              <p class="card__city" aria-label="City name">${
+                this.location.name
+              }</p>
               <p class="card__country" aria-label="Region name, country name">${
-                this.region ? `${this.region}, ` : ``
-              }${this.country}</p>
+                this.location.region ? `${this.location.region}, ` : ``
+              }${this.location.country}</p>
             </div>
 
             <div class="card__conditions">
@@ -199,7 +174,7 @@ export class CardView {
       index1,
       this.forecast.forecastday[0].hour.length
     );
-    // get index of the last hour we need - 24 hours from index1
+    // get number of hours we need from tomorrow - 24 - number of today's remaining hours
     const index2 = 24 - todayHours.length;
     // create array of hours we need from tomorrow
     const tomorrowHours = this.forecast.forecastday[1].hour.slice(0, index2);
@@ -212,25 +187,13 @@ export class CardView {
       // get hours and minutes
       const hours = helpers.addZero(time.getHours());
       const minutes = helpers.addZero(time.getMinutes());
-      function getAmPm(hour) {
-        const str = +hour < 12 ? ' AM' : ' PM';
-        if (+hour === 12 || +hour === 0) return '';
-        return str;
-      }
-      // const amPm = hours <= 12 ? ' AM' : ' PM';
-      function formatHours(hour) {
-        if (+hour === 0) return 'MIDNIGHT';
-        else if (+hour === 12) return 'NOON';
-        else return +hour % 12;
-      }
-      // const formatedHours = this.settings.time === 'h24' ? hours : hours % 12;
       //create markup
       const markup = `
         <div class="card__forecast__item">
           <div class="card__forecast__name" aria-label="Forecast time">${
-            this.settings.time === 'h24' ? hours : formatHours(hours)
+            this.settings.time === 'h24' ? hours : helpers.hours12hFormat(hours)
           }${this.settings.time === 'h24' ? `:${minutes}` : ''}${
-        this.settings.time === 'h24' ? '' : getAmPm(hours)
+        this.settings.time === 'h24' ? '' : helpers.setAmPm(hours)
       }</div>
           <div class="card__forecast__icon" aria-label="forecast icon">
             <img
@@ -242,7 +205,7 @@ export class CardView {
           )}&deg;${this.settings.temp.toUpperCase()}</div>
         </div>
       `;
-      // insert it into the parent element
+      // insert markup into the parent element
       document
         .getElementById(this.id)
         .querySelector('.card__forecast--hourly')
@@ -272,7 +235,7 @@ export class CardView {
               )}&deg;${this.settings.temp.toUpperCase()}</div>
             </div>
           `;
-      // insert it into the parent element
+      // insert markup into the parent element
       document
         .getElementById(this.id)
         .querySelector('.card__forecast--daily')
@@ -333,21 +296,27 @@ export class CardView {
     else if (this.colon === ' ') this.colon = ':';
     // add 1 second
     this.timeSeconds++;
+    // at 60 seconds
     if (this.timeSeconds === 60) {
+      //reset seconds
       this.timeSeconds = 0;
       // add 1 minute
       this.timeMinutes++;
+      // at 60 minutes
       if (this.timeMinutes === 60) {
+        //reset minutes
         this.timeMinutes = 0;
         // add 1 hour
         this.timeHours++;
-        // this.displayHours++;
+        // at 24 hours
         if (this.timeHours === 24) {
+          //reset hours
           this.timeHours = 0;
-          // this.displayHours = 0;
-          // add day of week index
+          // increase day of week index
           this.timeDayIndex++;
+          // on last day reset back to 0
           if (this.timeDayIndex > 6) this.timeDayIndex = 0;
+          // get day of week full name
           this.timeDayFull = helpers.daysOfWeek(this.timeDayIndex, 'full');
         }
       }
@@ -356,10 +325,10 @@ export class CardView {
 
   // UPDATE TIME TEXT
   updateTimeText() {
-    // this.amPm = this.timeHours < 12 ? ' AM' : ' PM';
+    // update AM/PM indicator
     if (this.settings.time === 'h24') this.amPm = '';
     else this.amPm = this.timeHours < 12 ? ' AM' : ' PM';
-
+    // update time string
     document
       .getElementById(this.id)
       .querySelector(
@@ -400,9 +369,8 @@ export class CardView {
       });
   }
 
-  // code is used for setting background when card is being displayed
+  // SET THE CODE VARIABLE ACCORDING TO WEATHER CONDITIONS
   changeBackgroundCode() {
-    // se the code variable according to weather conditions
     if (this.current.condition.code === 1000) this.backgroundCode = 'clear';
     if (this.current.condition.code === 1003)
       this.backgroundCode = 'partly-cloudy';
@@ -475,9 +443,9 @@ export class CardView {
     this.renderCard();
     this.renderForecastHourly();
     this.renderForecastDaily();
+    this.startTime();
     this.addHandlerScrollForecast();
     this.addHandlerForecastBtns();
-    this.startTime();
     this.addHandlerFavouriteBtn(handler);
     this.changeBackgroundCode();
   }

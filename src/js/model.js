@@ -88,23 +88,26 @@ export const addOrRemoveCard = clickedCard => {
   }
   // save favourites to local storage
   setLocalStorage();
-  // return array length - value used by other functions in view
+  // return array length - value used by card's addHandlerFavouriteBtn method
   return state.favourites.length;
 };
 
 // SAVING FAVOURITE PLACES AND SETTINGS TO LOCAL STORAGE
 export const setLocalStorage = () => {
+  //favourites
   localStorage.setItem('tiempoFavourites', JSON.stringify(state.favourites));
-
+  //settings
   localStorage.setItem('tiempoSettings', JSON.stringify(state.settings));
 };
 
 // GETTING FAVOURITE PLACES AND SETTINGS FROM LOCAL STORAGE
 export const getLocalStorage = () => {
+  //favourites
   const favourites = localStorage.getItem('tiempoFavourites');
+  // if object in local storage exists, update state object
   if (favourites && favourites.length)
     state.favourites = JSON.parse(favourites);
-
+  //settings
   const settings = localStorage.getItem('tiempoSettings');
   if (settings) state.settings = JSON.parse(settings);
 };

@@ -1,7 +1,5 @@
 'use strict';
 
-import mainView from './mainView.js';
-
 const modalOverlay = document.querySelector('.overlay--modal');
 const infoModal = document.querySelector('.modal--info');
 const settingsModal = document.querySelector('.modal--settings');
@@ -11,7 +9,7 @@ const closeBtns = document.querySelectorAll('.modal__close');
 const mainBox = document.querySelector('.main-box');
 
 class ModalView {
-  // show modal woth given class name
+  // show modal with given class name
   showModal(name) {
     // show overlay
     modalOverlay.classList.add('active');
@@ -21,7 +19,7 @@ class ModalView {
     document.body.style.overflow = 'hidden';
   }
 
-  // hide modal woth given class name
+  // hide modal with given class name
   hideModal(name) {
     // hide overlay
     modalOverlay.classList.remove('active');
@@ -31,6 +29,7 @@ class ModalView {
     document.body.style.overflow = 'initial';
   }
 
+  // hide both modals when clicking on overlay
   addHandlerModalOverlay(handler) {
     modalOverlay.addEventListener('click', () => {
       this.hideModal('info');
@@ -41,17 +40,15 @@ class ModalView {
 
   setSmoothScrollOn() {
     mainBox.classList.add('smooth-scroll');
-    console.log('smooth scroll on');
   }
 
   setSmoothScrollOff() {
     mainBox.classList.remove('smooth-scroll');
-    console.log('smooth scroll off');
   }
 
-  // INITIAL SETTINGS ON LOAD
+  // INITIAL SETTINGS OF ELEMENTS IN THE SETTINGS MODAL
   initSettings(settings) {
-    console.log(settings);
+    // units radio buttons
     // loop through the values of unit settings
     Object.values(settings.units).forEach(value => {
       // for each value select the radio input with the same value and set it as checked
@@ -60,6 +57,7 @@ class ModalView {
         .querySelector(`input[value=${value}]`).checked = true;
     });
 
+    // smooth scrolling switch button
     // check value of smoothScrollinng in settings
     // if true, set the check input as checked
     if (settings.smoothScroll) {
@@ -75,20 +73,7 @@ class ModalView {
         .querySelector(`input[name=smoothScroll]`).checked = false;
       this.setSmoothScrollOff();
     }
-    // // check value of bgImg in settings
-    // // if true, set the check input as checked
-    // if (settings.bgImg) {
-    //   document
-    //     .querySelector('.modal__settings')
-    //     .querySelector(`input[name=bgImg]`).checked = true;
-    // }
-    // // otherwise set as not checked
-    // else {
-    //   document
-    //     .querySelector('.modal__settings')
-    //     .querySelector(`input[name=bgImg]`).checked = false;
-    //   mainView.resetBackground();
-    // }
+
     // disable save changes btn
     settingsFormSubmitBtn.disabled = true;
   }
@@ -127,12 +112,13 @@ class ModalView {
       // run handler with new settings object as argument
       handler(newSettings);
       // // disable submit button again
-      // settingsFormSubmitBtn.disabled = true;
+      settingsFormSubmitBtn.disabled = true;
       // hide settings modal window again
       this.hideModal('settings');
     });
   }
 
+  // hide modals on clicking close btn, also reset settings elements (handler)
   addHandlerCLoseBtn(handler) {
     closeBtns.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -143,6 +129,7 @@ class ModalView {
     });
   }
 
+  // hide modals on pressing Escape, also reset settings elements (handler)
   addHandlerEscapeKey(handler) {
     document.addEventListener('keydown', e => {
       if (e.key === `Escape`)

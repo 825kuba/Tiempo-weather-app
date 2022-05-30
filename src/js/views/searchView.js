@@ -147,6 +147,7 @@ class SearchView extends Spinner {
     });
   }
 
+  // ADD HANDLE RFOR SUBMITING THE FORM - PRESSING ENTER
   addHandlerSubmitForm(handler) {
     searchBar.addEventListener('submit', e => {
       e.preventDefault();
