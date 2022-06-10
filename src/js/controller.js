@@ -232,7 +232,7 @@ function init() {
   searchView.addHandlerSearchInput(controlSearchResults);
   searchView.addHandlerSearchResult(controlForecastByQuery);
   searchView.addHandlerSubmitForm(controlForecastByQuery);
-  // controlForecastByPosition();
+  controlForecastByPosition();
   searchView.addHandlerLocationBtn(controlForecastByPosition);
   mainView.addHandlersSideScrolling(model.state);
 }

@@ -48,7 +48,6 @@ export const getForecastData = async query => {
     if (!response.ok) throw new Error(`We couldn't find anything :(`);
     // return converted response data
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (err) {
     throw err;

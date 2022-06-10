@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel ./src/index.html",
     "build": "parcel build ./src/index.html",
-    "netlify": "./node_modules/.bin/netlify"
+    "netlify": "./node_modules/.bin/netlify dev"
   },
   "keywords": [],
   "author": "",
