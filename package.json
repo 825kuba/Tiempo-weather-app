@@ -5,8 +5,7 @@
   "default": "index.html",
   "scripts": {
     "start": "parcel ./src/index.html",
-    "build": "parcel build ./src/index.html",
-    "netlify": "./node_modules/.bin/netlify dev"
+    "build": "parcel build ./src/index.html && cp -r src/img dist/"
   },
   "keywords": [],
   "author": "",

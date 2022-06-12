@@ -216,7 +216,7 @@ class MainView extends SpinnerView {
     // find out if it's day or night
     const isDay = card.current.is_day ? 'day' : 'night';
     // get image name based on weather code
-    const bgUrl = `../../img/bg/${size}/${isDay}/${card.backgroundCode}.jpg`;
+    const bgUrl = `./img/bg/${size}/${isDay}/${card.backgroundCode}.jpg`;
     // set background img
     document.body.style.backgroundImage = `
       linear-gradient(
