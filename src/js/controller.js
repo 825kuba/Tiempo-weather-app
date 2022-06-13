@@ -206,6 +206,9 @@ function controlSettings(newSettings) {
     });
     // reset the scrolling
     mainView.initSideScroll(model.state.favourites.length);
+    // switch smooth scroll on or off
+    if (model.state.settings.smoothScroll) modalView.setSmoothScrollOn();
+    else modalView.setSmoothScrollOff();
     // change background img
     mainView.changeBackground(model.state.favourites[0]);
   }
