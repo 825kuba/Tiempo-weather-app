@@ -74,6 +74,21 @@ class ModalView {
       this.setSmoothScrollOff();
     }
 
+    // background images switch button
+    // check value of bgImg in settings
+    // if true, set the check input as checked
+    if (settings.bgImg) {
+      document
+        .querySelector('.modal__settings')
+        .querySelector(`input[name=bgImg]`).checked = true;
+    }
+    // otherwise set as not checked
+    else {
+      document
+        .querySelector('.modal__settings')
+        .querySelector(`input[name=bgImg]`).checked = false;
+    }
+
     // disable save changes btn
     settingsFormSubmitBtn.disabled = true;
   }

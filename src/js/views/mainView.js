@@ -73,10 +73,17 @@ class MainView extends SpinnerView {
       if (state.settings.smoothScroll) {
         clearTimeout(this.backgroundTimer);
         this.backgroundTimer = setTimeout(() => {
-          this.changeBackground(state.favourites[this.scrollIndex]);
+          this.changeBackground(
+            state.favourites[this.scrollIndex],
+            state.settings
+          );
         }, 200);
         // if smooth scroll is off, just change the background without any timer
-      } else this.changeBackground(state.favourites[this.scrollIndex]);
+      } else
+        this.changeBackground(
+          state.favourites[this.scrollIndex],
+          state.settings
+        );
     });
   }
 
@@ -206,7 +213,13 @@ class MainView extends SpinnerView {
     return Array.from(allCardsBox.querySelectorAll('.card-box')).length;
   }
 
-  changeBackground(card) {
+  changeBackground(card, settings) {
+    // if bgImg settings is off
+    if (!settings.bgImg) {
+      // set "none" as bg img and return function
+      document.body.style.backgroundImage = 'none';
+      return;
+    }
     // get screen size
     const res = window.innerWidth;
     let size;

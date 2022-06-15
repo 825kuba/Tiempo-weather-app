@@ -70,7 +70,7 @@ async function controlForecastByQuery(query) {
     // get forecast data and render card
     await controlForecastForMainCard(query);
     // change background img
-    mainView.changeBackground(model.state.mainCard);
+    mainView.changeBackground(model.state.mainCard, model.state.settings);
   } catch (err) {
     // error handling
     mainView.clearView();
@@ -97,7 +97,7 @@ async function controlForecastByPosition() {
     // get forecast data and render card
     await controlForecastForMainCard(query);
     // change background img
-    mainView.changeBackground(model.state.mainCard);
+    mainView.changeBackground(model.state.mainCard, model.state.settings);
   } catch (err) {
     // if getUserPosition function returned rejected promise, then clear view and display error based on the error object's code
     mainView.clearView();
@@ -166,7 +166,7 @@ async function controlForecastForFavourites() {
     // allow side scrolling
     mainView.initSideScroll(model.state.favourites.length);
     // change background img
-    mainView.changeBackground(model.state.favourites[0]);
+    mainView.changeBackground(model.state.favourites[0], model.state.settings);
   } catch (err) {
     // error handling
     mainView.clearView();
@@ -184,19 +184,19 @@ function controlSettings(newSettings) {
   const numOfCards = mainView.getNumberOfCardsDisplayed();
   // if there are no cards displayed, no action is needed
   if (!numOfCards) return;
+  // clear view
+  mainView.clearView();
   // if there is one card displayed
   if (numOfCards === 1) {
-    // clear view
-    mainView.clearView();
     //update settings for card
     model.state.mainCard.settings = model.state.settings.units;
     // render card again
     model.state.mainCard.cardInit(model.addOrRemoveCard);
+    // change background img
+    mainView.changeBackground(model.state.mainCard, model.state.settings);
   }
   // if there is more than 1 card displayed
   if (numOfCards > 1) {
-    // clear main view
-    mainView.clearView();
     // for each card
     model.state.favourites.forEach(card => {
       //update settings for card
@@ -210,7 +210,7 @@ function controlSettings(newSettings) {
     if (model.state.settings.smoothScroll) modalView.setSmoothScrollOn();
     else modalView.setSmoothScrollOff();
     // change background img
-    mainView.changeBackground(model.state.favourites[0]);
+    mainView.changeBackground(model.state.favourites[0], model.state.settings);
   }
 }
 

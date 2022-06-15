@@ -15,7 +15,7 @@ export const state = {
       rain: 'mm',
       time: 'h24',
     },
-    smoothScroll: false,
+    smoothScroll: true,
     bgImg: true,
   },
 };
