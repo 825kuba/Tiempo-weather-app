@@ -75,6 +75,7 @@ export class CardView {
       <div class="card">
         <div class="card__toolbar">
           <time class="card__time-date" aria-label="Local time">
+            <i class="fa-regular fa-clock"></i>
             <span class="card__time">${
               this.settings.time === 'h24'
                 ? this.timeHours
@@ -331,11 +332,11 @@ export class CardView {
     // update time string
     document
       .getElementById(this.id)
-      .querySelector(
-        '.card__time-date'
-      ).innerHTML = `<span class="card__time">${
-      this.settings.time === 'h24' ? this.timeHours : this.timeHours % 12
-    }${this.colon}${helpers.addZero(this.timeMinutes)}${this.amPm}</span>, ${
+      .querySelector('.card__time-date').innerHTML = `
+      <i class="fa-regular fa-clock"></i>
+      <span class="card__time">${
+        this.settings.time === 'h24' ? this.timeHours : this.timeHours % 12
+      }${this.colon}${helpers.addZero(this.timeMinutes)}${this.amPm}</span>, ${
       this.timeDayFull
     }`;
   }
