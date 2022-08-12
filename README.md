@@ -17,3 +17,7 @@ A simple weather app, that allows user to search for a place, add it to favourit
 - Parcel
 - BEM naming convention
 - MVC architecture
+
+## Live version
+
+https://jakub-tiempo.netlify.app/
