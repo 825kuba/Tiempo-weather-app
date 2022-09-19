@@ -31,6 +31,7 @@ export const getSearchData = async searchQuery => {
     if (!response.ok) throw new Error(response.status);
     // return converted response data
     const data = await response.json();
+    console.log(data);
     return data;
   } catch (err) {
     throw err;
@@ -65,7 +66,8 @@ export const getUserPosition = () =>
         // success - return position object as resolved promise
         // fail - return error object as rejected promise
         resolve,
-        reject
+        reject,
+        { timeout: 10000 }
       );
   });
 

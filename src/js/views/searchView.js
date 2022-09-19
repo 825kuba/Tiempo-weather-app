@@ -82,7 +82,9 @@ class SearchView extends Spinner {
       // clear any potential timeout from before
       clearTimeout(typingTimeout);
       // get input field value
-      const query = searchBarInput.value;
+      const query = searchBarInput.value
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '');
       // if there is any value, run timeout, when it finishes, run function
       if (query)
         typingTimeout = setTimeout(() => {
